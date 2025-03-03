@@ -1,78 +1,206 @@
-<!DOCTYPE html>
+{% load static %} <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InstructAI - Empower Your Learning</title>
-    {% load static %}  <link rel="stylesheet" href="{% static 'css/style.css' %}"> </head>
+    <meta charset="utf-8" />
+    <title>InstructAI - Empower Your Learning with AI</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 <body>
-
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Login/Signup</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h1>Empower Your <span>Learning</span> <br> with AI</h1>
-        <p>Personalized notes, interactive videos & AI-Powered Quizzes <br> Tailored Just for You!</p>
-        <button>Get Started For Free</button>
-    </section>
-
-    <section class="what-is">
-        <h2>What is InstructAI?</h2>
-        <p>InstructAI revolutionizing the way students and professionals learn. We harness Artificial Intelligence to create personalized, interactive, and effective study experiences. We understand that traditional learning methods can be time-consuming and dull...</p>
-    </section>
-
-    <section class="why-choose">
-        <h2>Why choose InstructAI?</h2>
-        <div class="features-grid">
-            <div class="feature">
-                <h3>AI-Generated Notes</h3>
-                <p>Self-attuned, customized and tailored notes</p>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-container">
+                <div class="header-logo">
+                    <a href="/" class="header-logo-text">InstructAI</a>
+                </div>
+                <nav class="header-navigation">
+                    <a href="/" class="header-nav-item header-home-nav-item">Home</a>
+                    <a href="#" class="header-nav-item">Features</a>
+                    <a href="#" class="header-nav-item">About Us</a>
+                    <a href="#" class="header-nav-item">Contact Us</a>
+                </nav>
+                <div class="header-auth">
+                    <button class="header-auth-button button-state-layer">
+                        LOGIN / SIGN UP
+                    </button>
+                </div>
             </div>
-            <div class="feature">
-                <h3>Interactive Video Creation</h3>
-                <p>Challenge-based videos to refine understanding</p>
-            </div>
-            <div class="feature">
-                <h3>AI-Powered Quizzes</h3>
-                <p>Challenge-based quizzes with intelligent, adaptive feedback</p>
-            </div>
-            <div class="feature">
-                <h3>Progress Tracking</h3>
-                <p>Monitor your learning trajectory with analytics</p>
-            </div>
-            <div class="feature">
-                <h3>AI Mock Interviews</h3>
-                <p>Prepare for real-world interviews with Al-driven feedback</p>
-            </div>
-            <div class="feature">
-                <h3>Secure & Scalable</h3>
-                <p>Your data secured, encrypted and with enterprise-grade security</p>
-            </div>
-        </div>
-    </section>
+        </header>
 
-    <section class="get-in-touch">
-        <h2>Get in Touch</h2>
-        <form>
-            <input type="text" placeholder="Full Name">
-            <input type="email" placeholder="Email">
-            <textarea placeholder="Your Message"></textarea>
-            <button type="submit">Submit</button>
-        </form>
-    </section>
+        <main class="main-content">
+            <section class="hero-section">
+                <div class="hero-container">
+                    <img class="hero-background-pattern" src="{% static 'img/background-pattern.png' %}" alt="" aria-hidden="true"/>
+                    <div class="hero-content">
+                        <div class="hero-visual-art">
+                            <div class="hero-blob-art">
+                                <div class="blob-group">
+                                    <div class="blob-ellipse blob-element-1"></div>
+                                    <div class="blob-ellipse blob-element-2"></div>
+                                    <div class="blob-ellipse blob-element-3"></div>
+                                </div>
+                                <div class="blob-ellipse blob-element-4"></div>
+                            </div>
+                        </div>
+                        <div class="hero-text-container">
+                            <h1 class="hero-main-heading">
+                                <span class="hero-heading-primary">Empower Your</span>
+                                <span class="hero-heading-secondary">Learning with AI</span>
+                            </h1>
+                        </div>
+                        <img class="hero-image" src="{% static 'img/adobe-express-file-1.png' %}" alt="" aria-hidden="true"/>
+                    </div>
+                    <p class="hero-description">
+                        Personalized Notes, Interactive Videos &amp; AI-Powered Quizzes Tailored Just for You!
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="button-state-layer">
+                            <div class="button-label-text">EXPLORE FEATURES</div>
+                        </button>
+                        <button class="button-state-layer">
+                            <div class="button-label-text">GET STARTED FOR FREE</div>
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-    <footer>
-        <p>&copy; 2023 InstructAI. All rights reserved.</p>
-    </footer>
+            <section class="about-us-section">
+                <div class="about-us-container">
+                    <h2 class="about-us-heading">
+                        <span class="section-heading-primary">What is </span> <span class="section-heading-secondary">InstructAI?</span>
+                    </h2>
+                    <div class="about-us-content-container">
+                        <img class="about-us-image" src="{% static 'img/image.png' %}" alt="About InstructAI" />
+                        <p class="about-us-description">
+                            Instruct AI is revolutionizing the way students and professionals learn by leveraging Artificial
+                            Intelligence to create personalized, interactive, and efficient study experiences.<br />We understand
+                            that traditional learning methods can be time-consuming and rigid. <br /><br />That’s why we built an
+                            AI-driven platform that generates smart notes, interactive videos, and adaptive quizzes, ensuring you
+                            grasp concepts faster and retain information longer.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-    <script src="{% static 'js/script.js' %}"></script> </body>
+            <section class="features-section">
+                <div class="features-container">
+                    <h2 class="features-section-heading">
+                        <span class="section-heading-primary">Why choose </span> <span class="section-heading-secondary">InstructAI?</span>
+                    </h2>
+                    <div class="feature-cards-container">
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">
+                                <span class="feature-icon">📜 </span> <span class="feature-text">AI-Generated Notes</span>
+                            </h3>
+                            <p class="feature-card-description">Get smart, concise, and structured notes in seconds.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">📺 Interactive Video Creation</h3>
+                            <p class="feature-card-description">Convert text into engaging educational videos.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">🧠 AI-Powered Quizzes</h3>
+                            <p class="feature-card-description">Challenge yourself with intelligent, adaptive quizzes.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">📊 Progress Tracking</h3>
+                            <p class="feature-card-description">Monitor your learning journey with analytics.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">🎙️ AI Mock Interviews</h3>
+                            <p class="feature-card-description">Prepare for real-world challenges with AI-driven feedback.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3 class="feature-card-title">🔒 Secure &amp; Scalable</h3>
+                            <p class="feature-card-description">Your data, encrypted and safe with enterprise-grade security.</p>
+                        </div>
+                    </div>
+                    <div class="features-explore-button-container">
+                        <button class="button-state-layer">
+                            <div class="button-label-text">EXPLORE ALL FEATURES</div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-us-section">
+                <div class="contact-us-container">
+                    <h2 class="contact-section-heading">
+                        <span class="section-heading-primary">Get in </span> <span class="section-heading-secondary">Touch</span>
+                    </h2>
+                    <div class="contact-form-background">
+                        <form class="contact-form">
+                            <div class="contact-form-input-container">
+                                <input type="text" class="contact-form-input" placeholder="Full Name" aria-label="Full Name">
+                            </div>
+                            <div class="contact-form-input-container contact-form-input-container-email">
+                                <input type="email" class="contact-form-input" placeholder="Email ID" aria-label="Email ID">
+                            </div>
+                            <div class="contact-form-textarea-container">
+                                <textarea class="contact-form-textarea" placeholder="Your Message" aria-label="Your Message"></textarea>
+                            </div>
+                            <button class="button-state-layer" type = "submit">
+                                <div class="button-label-text">SEND MESSAGE</div>
+                            </button>
+                        </form>
+                        <img class="contact-form-icon" src="{% static 'img/letter-send-1.png' %}" alt="" aria-hidden="true"/>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content-container">
+                <div class="footer-brand-info">
+                    <div class="footer-logo">
+                        <a href="/" class="footer-logo-text">InstructAI</a>
+                    </div>
+                    <hr class="footer-separator-line">
+                    <div class="footer-contacts-section">
+                        <h4 class="footer-section-title">Reach us</h4>
+                        <div class="footer-contact-info">
+                            <i class="fas fa-phone-alt contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">9876543210</p>
+                        </div>
+                        <div class="footer-contact-info">
+                            <i class="far fa-envelope contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">instructai@gmail.com</p>
+                        </div>
+                        <div class="footer-contact-info">
+                            <i class="fas fa-map-marker-alt contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">Vellore Institute of Technology, Vellore, Tamil Nadu, India</p>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="footer-quick-links">
+                    <h4 class="footer-section-title">Quick Links</h4>
+                    <ul class="footer-quick-links-list">
+                        <li><a href="#" class="footer-quick-link-item">Home</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Features</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Contact</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Privacy Policy</a></li>
+                    </ul>
+                </div>
+        
+                <div class="footer-community">
+                    <h4 class="footer-community-heading">Join Our Community</h4>
+                    <h5 class="footer-follow-us-heading">Follow Us</h5>
+                    <p class="footer-newsletter-description">
+                        *&nbsp;&nbsp;Will send you weekly updates for your better tool management.
+                    </p>
+                    <div class="footer-subscribe-container">
+                        <input type="email" class="footer-subscribe-input" placeholder="Your email address" aria-label="Your email address">
+                        <button class="footer-subscribe-button button-state-layer">
+                            <div class="button-label-text">Subscribe</div>
+                        </button>
+                    </div>
+                    <div class="footer-social-icons">
+                        <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="footer-copyright-text">© 2025 InstructAI. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>
