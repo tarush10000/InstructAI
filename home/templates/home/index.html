@@ -20,9 +20,11 @@
                     <a href="#" class="header-nav-item">Contact Us</a>
                 </nav>
                 <div class="header-auth">
-                    <button class="header-auth-button button-state-layer">
-                        LOGIN / SIGN UP
-                    </button>
+                    <a href = "{% url 'signup' %}">
+                        <button class="header-auth-button button-state-layer">
+                            LOGIN / SIGN UP
+                        </button>
+                    </a>
                 </div>
             </div>
         </header>
@@ -90,33 +92,49 @@
                     <div class="feature-cards-container">
                         <div class="feature-card">
                             <h3 class="feature-card-title">
-                                <span class="feature-icon">📜 </span> <span class="feature-text">AI-Generated Notes</span>
+                                <i class="fas fa-file-alt feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">AI-Generated Notes</span>
                             </h3>
                             <p class="feature-card-description">Get smart, concise, and structured notes in seconds.</p>
                         </div>
                         <div class="feature-card">
-                            <h3 class="feature-card-title">📺 Interactive Video Creation</h3>
+                            <h3 class="feature-card-title">
+                                <i class="fas fa-video feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">Interactive Video Creation</span>
+                            </h3>
                             <p class="feature-card-description">Convert text into engaging educational videos.</p>
                         </div>
                         <div class="feature-card">
-                            <h3 class="feature-card-title">🧠 AI-Powered Quizzes</h3>
+                            <h3 class="feature-card-title">
+                                <i class="fas fa-brain feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">AI-Powered Quizzes</span>
+                            </h3>
                             <p class="feature-card-description">Challenge yourself with intelligent, adaptive quizzes.</p>
                         </div>
                         <div class="feature-card">
-                            <h3 class="feature-card-title">📊 Progress Tracking</h3>
+                            <h3 class="feature-card-title">
+                                <i class="fas fa-chart-line feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">Progress Tracking</span>
+                            </h3>
                             <p class="feature-card-description">Monitor your learning journey with analytics.</p>
                         </div>
                         <div class="feature-card">
-                            <h3 class="feature-card-title">🎙️ AI Mock Interviews</h3>
+                            <h3 class="feature-card-title">
+                                <i class="fas fa-microphone-alt feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">AI Mock Interviews</span>
+                            </h3>
                             <p class="feature-card-description">Prepare for real-world challenges with AI-driven feedback.</p>
                         </div>
                         <div class="feature-card">
-                            <h3 class="feature-card-title">🔒 Secure &amp; Scalable</h3>
+                            <h3 class="feature-card-title">
+                                <i class="fas fa-shield-alt feature-icon" aria-hidden="true"></i>
+                                <span class="feature-text">Secure &amp; Scalable</span>
+                            </h3>
                             <p class="feature-card-description">Your data, encrypted and safe with enterprise-grade security.</p>
                         </div>
                     </div>
                     <div class="features-explore-button-container">
-                        <button class="button-state-layer">
+                        <button class="button-state-layer features-explore-button">
                             <div class="button-label-text">EXPLORE ALL FEATURES</div>
                         </button>
                     </div>
