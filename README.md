@@ -36,13 +36,18 @@ InstructAI is designed to provide a superior learning experience compared to tra
 To experience InstructAI locally (for front-end viewing):
 
 1.  **Clone the repository:**
-
     ```bash
     git clone https://github.com/tarush10000/InstructAI.git
     ```
-
-2.  **Open `index.html` in your web browser:**  Simply open the `index.html` file located in the repository folder in your preferred web browser (Chrome, Firefox, Safari, etc.) to view the website's front-end.
-
+2. **Open the InstructAI folder**
+    ```bash
+    cd InstructAI
+    ```
+3. **Run the server** 
+    ```bash
+    python manage.py runserver
+    ```
+    
 ## 🤝 Contributing
 
 Contributions to InstructAI are greatly appreciated!  If you'd like to contribute:
