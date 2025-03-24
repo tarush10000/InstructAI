@@ -1,206 +1,224 @@
 {% load static %} <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InstructAI Dashboard</title>
-  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <div class="dashboard-container">
-    <header class="main-header">
-      <div class="logo">InstructAI</div>
-      <nav class="main-nav">
-        <ul class="nav-links">
-          <li class="active"><a href="#">Dashboard</a></li>
-          <li><a href="#">Notes</a></li>
-          <li><a href="#">Videos</a></li>
-          <li><a href="#">Quizzes</a></li>
-          <li><a href="#">Interview</a></li>
-          <li><a href="#">Settings</a></li>
-        </ul>
-      </nav>
-      <button class="logout-btn">LOG OUT</button>
-    </header>
-
-    <main class="dashboard-content">
-      <section class="welcome-section">
-        <h1>Welcome Back, <span class="team-name">Darth</span></h1>
-        <p class="subtitle">Ready to learn? Your AI-generated study plan is here!</p>
-        <div class="action-buttons">
-          <button class="btn primary">Resume Last Note</button>
-          <button class="btn primary">Continue Last Quiz</button>
-          <button class="btn primary">View Learning Analytics</button>
-        </div>
-      </section>
-
-      <section class="quick-access">
-        <div class="quick-card">
-          <h3>✅ Recent AI-Generated Notes</h3>
-          <div class="card-actions">
-            <button class="btn small">View</button>
-            <button class="btn small">Edit</button>
-          </div>
-        </div>
-        <div class="quick-card">
-          <h3>✅ Latest Interactive Video</h3>
-          <button class="btn small">Watch</button>
-        </div>
-        <div class="quick-card">
-          <h3>✅ AI-Recommended Quizzes</h3>
-          <button class="btn small">Start</button>
-        </div>
-        <div class="quick-card">
-          <h3>✅ Progress Analytics</h3>
-          <button class="btn small">View Insights</button>
-        </div>
-        <div class="quick-card">
-          <h3>✅ Upcoming Deadlines/Reminders</h3>
-          <button class="btn small">Due Soon</button>
-        </div>
-        <div class="quick-card">
-          <h3>✅ Daily Learning Streak</h3>
-          <button class="btn small">Track</button>
-        </div>
-      </section>
-
-      <section class="progress-section">
-        <h2>Your Current <span class="highlight">Progress</span></h2>
-        
-        <div class="progress-grid">
-          <div class="chart-container">
-            <div class="chart-header">
-              <h3>Daily Learn Hours</h3>
-              <div class="chart-period">
-                <span>This Week</span>
-                <img src="img/dropdown-icon.svg" alt="Dropdown">
-              </div>
-            </div>
-            <canvas id="hoursChart"></canvas>
-          </div>
-
-          <div class="stats-container">
-            <div class="stat-card">
-              <h3>Quiz Performance</h3>
-              <canvas id="quizChart"></canvas>
-              <div class="chart-legend">
-                <div class="legend-item">
-                  <span class="dot correct"></span>
-                  <span>Correct</span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot incorrect"></span>
-                  <span>Incorrect</span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot not-attempted"></span>
-                  <span>Not attempted</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <h3>Completion Rate</h3>
-              <canvas id="completionChart"></canvas>
-              <div class="chart-legend">
-                <div class="legend-item">
-                  <span class="dot completed"></span>
-                  <span>Completed</span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot pending"></span>
-                  <span>Pending</span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot skipped"></span>
-                  <span>Skipped</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="streak-card">
-              <h3>Current Streak:</h3>
-              <div class="streak-count" id="streakCount">19 <span>days</span></div>
-            </div>
-          </div>
-
-          <div class="leaderboard-container">
-            <h3>Leaderboard Ranking</h3>
-            <table class="leaderboard-table" id="leaderboardTable">
-              <thead>
-                <tr>
-                  <th>Position</th>
-                  <th>Name</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- JS will populate this -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="main-footer">
-      <div class="footer-content">
-        <div class="footer-brand">InstructAI</div>
-        
-        <div class="footer-section">
-          <h4>Reach us</h4>
-          <div class="contact-info">
-            <div class="contact-item">
-              <img src="img/bxs-phone-call.svg" alt="Phone">
-              <span>9876543210</span>
-            </div>
-            <div class="contact-item">
-              <img src="img/ic-sharp-email.svg" alt="Email">
-              <span>instructai@gmail.com</span>
-            </div>
-            <div class="contact-item">
-              <img src="img/carbon-location-filled.svg" alt="Location">
-              <span>Vellore Institute of Technology, Vellore, Tamil Nadu, India</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InstructAI Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header class="main-header">
+        <div class="logo">InstructAI</div>
+        <nav class="main-nav">
+          <ul class="nav-links">
+            <li class="active"><a href="#">Dashboard</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Videos</a></li>
+            <li><a href="#">Quizzes</a></li>
+            <li><a href="#">Interview</a></li>
+            <li><a href="#">Settings</a></li>
           </ul>
-        </div>
+        </nav>
+        <button class="logout-btn">LOG OUT</button>
+      </header>
 
-        <div class="footer-section">
-          <h4>Follow Us</h4>
-          <div class="social-icons">
-            <a href="#"><img src="img/vector.svg" alt="Social"></a>
-            <a href="#"><img src="img/clip-path-group.png" alt="Twitter"></a>
-            <a href="#"><img src="img/group.png" alt="LinkedIn"></a>
+      <main class="dashboard-content">
+        <section class="welcome-section">
+          <h1>Welcome Back, <span class="team-name">Darth</span></h1>
+          <p class="subtitle">
+            Ready to learn? Your AI-generated study plan is here!
+          </p>
+          <div class="action-buttons">
+            <button class="btn primary">Resume Last Note</button>
+            <button class="btn primary">Continue Last Quiz</button>
+            <button class="btn primary">View Learning Analytics</button>
+          </div>
+        </section>
+
+        <section class="quick-access">
+          <div class="quick-card">
+            <h3>✅ Recent AI-Generated Notes</h3>
+            <div class="card-actions">
+              <button class="btn small">View</button>
+              <button class="btn small">Edit</button>
+            </div>
+          </div>
+          <div class="quick-card">
+            <h3>✅ Latest Interactive Video</h3>
+            <button class="btn small">Watch</button>
+          </div>
+          <div class="quick-card">
+            <h3>✅ AI-Recommended Quizzes</h3>
+            <button class="btn small">Start</button>
+          </div>
+          <div class="quick-card">
+            <h3>✅ Progress Analytics</h3>
+            <button class="btn small">View Insights</button>
+          </div>
+          <div class="quick-card">
+            <h3>✅ Upcoming Deadlines/Reminders</h3>
+            <button class="btn small">Due Soon</button>
+          </div>
+          <div class="quick-card">
+            <h3>✅ Daily Learning Streak</h3>
+            <button class="btn small">Track</button>
+          </div>
+        </section>
+
+        <section class="progress-section">
+          <h2>Your Current <span class="highlight">Progress</span></h2>
+
+          <div class="progress-grid">
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3>Daily Learn Hours</h3>
+                <div class="chart-period">
+                  <span>This Week</span>
+                  <img src="img/dropdown-icon.svg" alt="Dropdown" />
+                </div>
+              </div>
+              <canvas id="hoursChart"></canvas>
+            </div>
+
+            <div class="stats-container">
+              <div class="stat-card">
+                <h3>Quiz Performance</h3>
+                <canvas id="quizChart"></canvas>
+                <div class="chart-legend">
+                  <div class="legend-item">
+                    <span class="dot correct"></span>
+                    <span>Correct</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="dot incorrect"></span>
+                    <span>Incorrect</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="dot not-attempted"></span>
+                    <span>Not attempted</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <h3>Completion Rate</h3>
+                <canvas id="completionChart"></canvas>
+                <div class="chart-legend">
+                  <div class="legend-item">
+                    <span class="dot completed"></span>
+                    <span>Completed</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="dot pending"></span>
+                    <span>Pending</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="dot skipped"></span>
+                    <span>Skipped</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="streak-card">
+                <h3>Current Streak:</h3>
+                <div class="streak-count" id="streakCount">
+                  19 <span>days</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="leaderboard-container">
+              <h3>Leaderboard Ranking</h3>
+              <table class="leaderboard-table" id="leaderboardTable">
+                <thead>
+                  <tr>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- JS will populate this -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="main-footer">
+        <div class="footer-content">
+          <div class="footer-brand">InstructAI</div>
+
+          <div class="footer-section">
+            <h4>Reach us</h4>
+            <div class="contact-info">
+              <div class="contact-item">
+                <span class="material-symbols-outlined"> call </span>
+                <span>9876543210</span>
+              </div>
+              <div class="contact-item">
+                <span class="material-symbols-outlined"> mail </span>
+                <span>instructai@gmail.com</span>
+              </div>
+              <div class="contact-item">
+                <span class="material-symbols-outlined"> location_on </span>
+                <span
+                  >Vellore Institute of Technology, Vellore, Tamil Nadu,
+                  India</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+              <a href="#"><img src="img/vector.svg" alt="Social" /></a>
+              <a href="#"
+                ><img src="img/clip-path-group.png" alt="Twitter"
+              /></a>
+              <a href="#"><img src="img/group.png" alt="LinkedIn" /></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h4>Join Our Community</h4>
+            <div class="newsletter">
+              <input type="email" placeholder="Your email address" />
+              <button class="subscribe-btn">Subscribe</button>
+            </div>
+            <p class="disclaimer">
+              * Will send you weekly updates for your better tool management.
+            </p>
           </div>
         </div>
 
-        <div class="footer-section">
-          <h4>Join Our Community</h4>
-          <div class="newsletter">
-            <input type="email" placeholder="Your email address">
-            <button class="subscribe-btn">Subscribe</button>
-          </div>
-          <p class="disclaimer">* Will send you weekly updates for your better tool management.</p>
+        <div class="footer-bottom">
+          <p>© 2025 InstructAI. All Rights Reserved.</p>
         </div>
-      </div>
-      
-      <div class="footer-bottom">
-        <p>© 2025 InstructAI. All Rights Reserved.</p>
-      </div>
-    </footer>
-  </div>
-  <script src="{% static 'js/dashboard.js' %}"></script>
-</body>
+      </footer>
+    </div>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+  </body>
 </html>
