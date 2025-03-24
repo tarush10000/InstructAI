@@ -6,6 +6,7 @@
   <title>InstructAI Dashboard</title>
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
@@ -26,7 +27,7 @@
 
     <main class="dashboard-content">
       <section class="welcome-section">
-        <h1>Welcome Back, <span class="team-name">Team InstructAI</span></h1>
+        <h1>Welcome Back, <span class="team-name">Darth</span></h1>
         <p class="subtitle">Ready to learn? Your AI-generated study plan is here!</p>
         <div class="action-buttons">
           <button class="btn primary">Resume Last Note</button>
@@ -77,13 +78,13 @@
                 <img src="img/dropdown-icon.svg" alt="Dropdown">
               </div>
             </div>
-            <div class="chart-placeholder"></div>
+            <canvas id="hoursChart"></canvas>
           </div>
 
           <div class="stats-container">
             <div class="stat-card">
               <h3>Quiz Performance</h3>
-              <div class="pie-chart-placeholder"></div>
+              <canvas id="quizChart"></canvas>
               <div class="chart-legend">
                 <div class="legend-item">
                   <span class="dot correct"></span>
@@ -102,7 +103,7 @@
 
             <div class="stat-card">
               <h3>Completion Rate</h3>
-              <div class="pie-chart-placeholder"></div>
+              <canvas id="completionChart"></canvas>
               <div class="chart-legend">
                 <div class="legend-item">
                   <span class="dot completed"></span>
@@ -121,13 +122,13 @@
 
             <div class="streak-card">
               <h3>Current Streak:</h3>
-              <div class="streak-count">19 <span>days</span></div>
+              <div class="streak-count" id="streakCount">19 <span>days</span></div>
             </div>
           </div>
 
           <div class="leaderboard-container">
             <h3>Leaderboard Ranking</h3>
-            <table class="leaderboard-table">
+            <table class="leaderboard-table" id="leaderboardTable">
               <thead>
                 <tr>
                   <th>Position</th>
@@ -136,26 +137,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>2</td>
-                  <td>ABC</td>
-                  <td>7009</td>
-                </tr>
-                <tr class="highlighted">
-                  <td>3</td>
-                  <td>Team InstructAI</td>
-                  <td>6969</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>XYZ</td>
-                  <td>6904</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>PQR</td>
-                  <td>6787</td>
-                </tr>
+                <!-- JS will populate this -->
               </tbody>
             </table>
           </div>
@@ -219,5 +201,6 @@
       </div>
     </footer>
   </div>
+  <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
 </html>
