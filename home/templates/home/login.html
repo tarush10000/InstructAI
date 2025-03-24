@@ -35,27 +35,53 @@
                         <h2 class="section-heading-secondary auth-heading">Welcome Back</h2>
                         <p class="auth-subheading">Log In to your Account</p>
                     </div>
-
-                    <form class="auth-form login-form">
+                    <form class="auth-form login-form" method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Error Messages -->
+                        {% if error %}
+                        <div class="form-error">
+                            <p>{{ error }}</p>
+                        </div>
+                        {% endif %}
+                    
+                        <!-- Email Input -->
                         <div class="input-group">
                             <label for="email" class="input-label">Email</label>
-                            <input type="email" id="email" class="auth-input" placeholder="team@instructai.com" required>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   class="auth-input" 
+                                   placeholder="team@instructai.com" 
+                                   value="{{ request.POST.email }}"
+                                   required>
                         </div>
+                    
+                        <!-- Password Input -->
                         <div class="input-group password-input-group">
                             <label for="password" class="input-label">Password</label>
-                            <input type="password" id="password" class="auth-input password-input" placeholder="********" required>
+                            <input type="password" 
+                                   id="password" 
+                                   name="password" 
+                                   class="auth-input password-input" 
+                                   placeholder="********" 
+                                   required>
                             <button type="button" class="password-toggle-button" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye-slash password-icon"></i>
                             </button>
                         </div>
+                    
+                        <!-- Remember Me & Forgot Password -->
                         <div class="form-options">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="rememberMe" class="auth-checkbox">
+                                <input type="checkbox" 
+                                       id="rememberMe" 
+                                       name="remember_me" 
+                                       class="auth-checkbox">
                                 <label for="rememberMe" class="checkbox-label">Remember me</label>
                             </div>
-                            <a href="/forgot-password" class="forgot-password-link">Forgot Password?</a>
                         </div>
-
+                    
                         <button type="submit" class="button-state-layer auth-button login-button">CONTINUE</button>
                     </form>
 
@@ -89,20 +115,20 @@
         </footer>
     </div>
     <script>
-        const passwordInput = document.querySelector('.password-input');
-        const passwordToggleButton = document.querySelector('.password-toggle-button');
-        const passwordIcon = document.querySelector('.password-icon');
-
-        passwordToggleButton.addEventListener('click', function () {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.classList.remove('fa-eye-slash');
-                passwordIcon.classList.add('fa-eye');
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.classList.remove('fa-eye');
-                passwordIcon.classList.add('fa-eye-slash');
-            }
+        // Password toggle functionality
+        document.querySelectorAll('.password-toggle-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.password-input');
+                const icon = this.querySelector('.password-icon');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                }
+            });
         });
     </script>
 </body>

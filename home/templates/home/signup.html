@@ -36,23 +36,64 @@
                         <h2 class="section-heading-secondary auth-heading">Let's Get You Started</h2>
                         <p class="auth-subheading">Create an Account</p>
                     </div>
-                    <form class="auth-form signup-form">
+                    <form class="auth-form signup-form" method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Name Field -->
                         <div class="input-group">
                             <label for="name" class="input-label">Your Name</label>
-                            <input type="text" id="name" class="auth-input" placeholder="Team InstructAI" required>
+                            <input type="text" 
+                                   name="first_name"
+                                   id="name" 
+                                   class="auth-input" 
+                                   placeholder="Team InstructAI"
+                                   value="{{ form.first_name.value|default:'' }}">
+                            {{ form.first_name.errors }}
                         </div>
+                    
+                        <!-- Email Field -->
                         <div class="input-group">
                             <label for="email" class="input-label">Email</label>
-                            <input type="email" id="email" class="auth-input" placeholder="team@instructai.com" required>
+                            <input type="email" 
+                                   name="email" 
+                                   id="email" 
+                                   class="auth-input" 
+                                   placeholder="team@instructai.com"
+                                   value="{{ form.email.value|default:'' }}">
+                            {{ form.email.errors }}
                         </div>
+                    
+                        <!-- Password Field -->
                         <div class="input-group password-input-group">
                             <label for="password" class="input-label">Password</label>
-                            <input type="password" id="password" class="auth-input password-input" placeholder="********" required>
-                            <button type="button" class="password-toggle-button" aria-label="Toggle password visibility">
+                            <input type="password" 
+                                   name="password1" 
+                                   id="password" 
+                                   class="auth-input password-input" 
+                                   placeholder="********">
+                            {{ form.password1.errors }}
+                            <button type="button" class="password-toggle-button">
                                 <i class="fas fa-eye-slash password-icon"></i>
                             </button>
                         </div>
-                        <button type="submit" class="button-state-layer auth-button signup-button">GET STARTED</button>
+                    
+                        <!-- Confirm Password Field -->
+                        <div class="input-group password-input-group">
+                            <label for="password2" class="input-label">Confirm Password</label>
+                            <input type="password" 
+                                   name="password2" 
+                                   id="password2" 
+                                   class="auth-input password-input" 
+                                   placeholder="Confirm Password">
+                            {{ form.password2.errors }}
+                            <button type="button" class="password-toggle-button">
+                                <i class="fas fa-eye-slash password-icon"></i>
+                            </button>
+                        </div>
+                    
+                        <button type="submit" class="button-state-layer auth-button signup-button">
+                            GET STARTED
+                        </button>
                     </form>
 
                     <div class="auth-divider">
@@ -85,20 +126,20 @@
         </footer>
     </div>
     <script>
-        const passwordInput = document.querySelector('.password-input');
-        const passwordToggleButton = document.querySelector('.password-toggle-button');
-        const passwordIcon = document.querySelector('.password-icon');
-
-        passwordToggleButton.addEventListener('click', function () {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.classList.remove('fa-eye-slash');
-                passwordIcon.classList.add('fa-eye');
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.classList.remove('fa-eye');
-                passwordIcon.classList.add('fa-eye-slash');
-            }
+        // Password toggle functionality
+        document.querySelectorAll('.password-toggle-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.password-input');
+                const icon = this.querySelector('.password-icon');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                }
+            });
         });
     </script>
 </body>
