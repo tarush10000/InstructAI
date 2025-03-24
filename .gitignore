@@ -9,3 +9,13 @@ static/admin/
 *.idea/
 *.vscode/
 media/
+home/.env
+images/
+audio/
+bg/
+failed_image_prompts.txt
+image_prompts.txt
+initial_text.txt
+script.txt
+sentences.txt
+temp_uploads/
