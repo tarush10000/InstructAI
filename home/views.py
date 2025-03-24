@@ -1,19 +1,42 @@
 import os
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
-
-# Create your views here.
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import authenticate
+from .forms import CustomUserCreationForm
 
 def home_page(request):
     return render(request, 'home/index.html')
 
 def signup(request):
-    return render(request, 'home/signup.html')
+    if request.method == 'POST':
+        print("chal agay")
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)  # Use renamed import
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    
+    return render(request, 'home/signup.html', {'form': form})
 
-def login(request):
+
+def login(request):  # Renamed from 'login'
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        
+        if user is not None:
+            auth_login(request, user)  # Use renamed import
+            return redirect('home')
+        else:
+            return render(request, 'home/login.html', {'error': 'Invalid credentials'})
+    
     return render(request, 'home/login.html')
 
 def home(request):
@@ -131,3 +154,4 @@ def video_view(request, video_filename):
         transcript_content = "Transcript not found."
 
     return render(request, 'home/video_view.html', {'video_path': os.path.join(settings.MEDIA_URL, 'Video_Learning', video_filename), 'transcript': transcript_content})
+
