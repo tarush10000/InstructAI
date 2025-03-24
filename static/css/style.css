@@ -570,6 +570,9 @@ body {
     display: block;
     margin-bottom: 16px; 
 }
+.contact-item{
+    padding: 100px;
+}
 
 .footer-quick-link-item a {
     color: #ccc;

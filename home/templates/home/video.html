@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Generation</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .past-videos {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .past-videos h2 {
+            margin-bottom: 10px;
+        }
+        .past-videos ul {
+            list-style: none;
+            padding: 0;
+        }
+        .past-videos li {
+            margin-bottom: 5px;
+        }
+        .past-videos a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .past-videos a:hover {
+            text-decoration: underline;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .progress-bar {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1%;
+            text-align: center;
+            border-radius: 5px;
+            width: 0%; /* Initial width */
+        }
+        .success-message {
+            color: green;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'home/dj_index.html' %}
+
+    <main class="main-content">
+        <section class="form-section">
+            <div class="form-container">
+                <h1>Generate a Video</h1>
+                <form method="post" enctype="multipart/form-data" action="{% url 'generate_video' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.topic.label_tag }}
+                        {{ form.topic }}
+                        {% if form.topic.errors %}
+                            <div class="error">{{ form.topic.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.files.label_tag }}
+                        {{ form.files }}
+                        {% if form.files.errors %}
+                            <div class="error">{{ form.files.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="button-state-layer">Generate Video</button>
+                </form>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="video-progress">0%</div>
+                </div>
+
+                {% if generation_success %}
+                    <p class="success-message">Video generation successful! Check the list below.</p>
+                {% endif %}
+                {% if errors %}
+                    <div class="error-message">
+                        {% for field, error_list in errors.items %}
+                            {% for error in error_list %}
+                                <p>{{ field|capfirst }}: {{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="past-videos">
+            <div class="container">
+                <h2>Past Videos</h2>
+                {% if past_videos %}
+                    <ul>
+                        {% for video in past_videos %}
+                            <li><a href="{% url 'video_view' video_filename=video.filename %}">{{ video.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No videos have been generated yet.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    {% include 'home/dj_index.html' %}
+
+    <script>
+        // Basic progress bar simulation (replace with actual progress updates)
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('video-progress');
+            let width = 0;
+            function updateProgress() {
+                if (width < 100) {
+                    width++;
+                    progressBar.style.width = width + '%';
+                    progressBar.innerText = width + '%';
+                    setTimeout(updateProgress, 200); // Simulate progress
+                } else {
+                    progressBar.innerText = 'Complete!';
+                }
+            }
+            // You would trigger this function when video generation starts
+            // For this example, we'll just start it after the page loads
+            // updateProgress(); // Uncomment this to see a simulation on page load
+        });
+    </script>
+</body>
+</html>

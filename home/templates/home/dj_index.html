@@ -1,0 +1,126 @@
+{% load static %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>InstructAI - Empower Your Learning with AI</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-container">
+                <div class="header-logo">
+                    <a href="/" class="header-logo-text">InstructAI</a>
+                </div>
+                <nav class="header-navigation">
+                    <a href="/" class="header-nav-item header-home-nav-item">Home</a>
+                    <a href="#" class="header-nav-item">Features</a>
+                    <a href="#" class="header-nav-item">About Us</a>
+                    <a href="#" class="header-nav-item">Contact Us</a>
+                </nav>
+                <div class="header-auth">
+                    <a href = "{% url 'signup' %}">
+                        <button class="header-auth-button button-state-layer">
+                            LOGIN / SIGN UP
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <div class="hero-container">
+                    <img class="hero-background-pattern" src="{% static 'img/background-pattern.png' %}" alt="" aria-hidden="true"/>
+                    <div class="hero-content">
+                        <div class="hero-visual-art">
+                            <div class="hero-blob-art">
+                                <div class="blob-group">
+                                    <div class="blob-ellipse blob-element-1"></div>
+                                    <div class="blob-ellipse blob-element-2"></div>
+                                    <div class="blob-ellipse blob-element-3"></div>
+                                </div>
+                                <div class="blob-ellipse blob-element-4"></div>
+                            </div>
+                        </div>
+                        <div class="hero-text-container">
+                            <h1 class="hero-main-heading">
+                                <span class="hero-heading-primary">Empower Your</span>
+                                <span class="hero-heading-secondary">Learning with AI</span>
+                            </h1>
+                        </div>
+                        <img class="hero-image" src="{% static 'img/adobe-express-file-1.png' %}" alt="" aria-hidden="true"/>
+                    </div>
+                    <p class="hero-description">
+                        Personalized Notes, Interactive Videos &amp; AI-Powered Quizzes Tailored Just for You!
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="button-state-layer">
+                            <div class="button-label-text">EXPLORE FEATURES</div>
+                        </button>
+                        <a href="{% url 'video' %}"> <button class="button-state-layer">
+                                <div class="button-label-text">GENERATE VIDEO</div>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            </main>
+
+        <footer class="footer">
+            <div class="footer-content-container">
+                <div class="footer-brand-info">
+                    <div class="footer-logo">
+                        <a href="/" class="footer-logo-text">InstructAI</a>
+                    </div>
+                    <hr class="footer-separator-line">
+                    <div class="footer-contacts-section">
+                        <h4 class="footer-section-title">Reach us</h4>
+                        <div class="footer-contact-info">
+                            <i class="fas fa-phone-alt contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">9876543210</p>
+                        </div>
+                        <div class="footer-contact-info">
+                            <i class="far fa-envelope contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">instructai@gmail.com</p>
+                        </div>
+                        <div class="footer-contact-info">
+                            <i class="fas fa-map-marker-alt contact-info-icon" aria-hidden="true"></i> <p class="contact-info-text">Vellore Institute of Technology, Vellore, Tamil Nadu, India</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-quick-links">
+                    <h4 class="footer-section-title">Quick Links</h4>
+                    <ul class="footer-quick-links-list">
+                        <li><a href="#" class="footer-quick-link-item">Home</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Features</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Contact</a></li>
+                        <li><a href="#" class="footer-quick-link-item">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-community">
+                    <h4 class="footer-community-heading">Join Our Community</h4>
+                    <h5 class="footer-follow-us-heading">Follow Us</h5>
+                    <p class="footer-newsletter-description">
+                        *&nbsp;&nbsp;Will send you weekly updates for your better tool management.
+                    </p>
+                    <div class="footer-subscribe-container">
+                        <input type="email" class="footer-subscribe-input" placeholder="Your email address" aria-label="Your email address">
+                        <button class="footer-subscribe-button button-state-layer">
+                            <div class="button-label-text">Subscribe</div>
+                        </button>
+                    </div>
+                    <div class="footer-social-icons">
+                        <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="footer-copyright-text">© 2025 InstructAI. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
