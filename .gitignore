@@ -19,3 +19,9 @@ initial_text.txt
 script.txt
 sentences.txt
 temp_uploads/
+Video_Learning/
+temp_fixed_audio.wav
+final_video_no_audioTEMP_MPY_wvf_snd.mp4
+InstructAI\.env
+InstructAI/.env
+*.env

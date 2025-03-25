@@ -87,23 +87,17 @@ def generate_video(request):
 
             if file_extension == '.pdf':
                 try:
-                    from pdfminer.high_level import extract_text as pdf_extract_text
-                    extracted_text += pdf_extract_text(file_path) + "\n\n"
+                    import PyPDF2
+                    with open(file_path, 'rb') as pdf_file:
+                        pdf_reader = PyPDF2.PdfReader(pdf_file)
+                        extracted_text = ""
+                        for page_num in range(len(pdf_reader.pages)):
+                            page = pdf_reader.pages[page_num]
+                            extracted_text += page.extract_text() + "\n\n"
                 except ImportError:
-                    return HttpResponse("Error: pdfminer.six is not installed. Please install it: pip install pdfminer.six")
-            elif file_extension in ['.ppt', '.pptx']:
-                try:
-                    from pptx import Presentation
-                    prs = Presentation(file_path)
-                    for slide in prs.slides:
-                        for shape in slide.shapes:
-                            if shape.has_text_frame:
-                                for paragraph in shape.text_frame.paragraphs:
-                                    for run in paragraph.runs:
-                                        extracted_text += run.text + "\n"
-                                extracted_text += "\n"
-                except ImportError:
-                    return HttpResponse("Error: python-pptx is not installed. Please install it: pip install python-pptx")
+                    return HttpResponse("Error: PyPDF2 is not installed. Please install it: pip install PyPDF2")
+                except Exception as e:
+                    return HttpResponse(f"Error during PDF processing with PyPDF2: {e}")
             elif file_extension in ['.doc', '.docx']:
                 try:
                     from docx import Document
@@ -137,8 +131,10 @@ def generate_video(request):
             module_name = 'home.video_gen'
             module = importlib.import_module(module_name)
 
+            script = generate_script(extracted_text, topic)
+
             # Call the video generation script
-            transcript_content = module.main_with_input(topic, extracted_text, video_output_path, transcript_output_path)
+            transcript_content = module.main_with_input(topic, script, video_output_path, transcript_output_path)
 
             # Write the transcript file explicitly with UTF-8 encoding
             try:
@@ -155,6 +151,18 @@ def generate_video(request):
             return HttpResponse(f"Error during video generation: {e}")
     else:
         return render(request, 'home/video.html', {'form': form, 'errors': form.errors, 'past_videos': get_past_videos()})
+
+import google.generativeai as genai
+
+def generate_script(extracted_text, topic):
+    api = settings.GEMINI_API_KEY
+    genai.configure(api_key=api)
+    model = genai.GenerativeModel("gemini-2.0-flash")
+    script = model.generate_content(
+            f"For the given topic: {topic} "
+            f"Generate a 1 line video script based on the following text: {extracted_text}. You can also use content from outside the text to explain. The video script should be in 1st person narrator explaining what the concept is without the use of any other person in the explanation unless needed explicitly. JUST GENERATE THE SCRIPT. DO NOT GENERATE ANY INTRODUCTION, EXPLANATION etc.",
+        )
+    return str(script)
 
 def video_view(request, video_filename):
     video_path = os.path.join(VIDEO_LEARNING_DIR, video_filename)
