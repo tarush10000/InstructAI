@@ -33,69 +33,70 @@
       <img class="pattern pattern-2" src="img/pattern-2.png" alt="">
     </div>
     
-    <form class="notes-form" action="#" method="post" enctype="multipart/form-data">
+    <form class="notes-form" action="{% url 'generate_notes' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
       <h2 class="form-title">Your Syllabus</h2>
-      
+  
       <div class="form-group">
-        <label for="subject-title" class="form-label">Give subject title</label>
-        <input type="text" id="subject-title" class="form-input" placeholder="Subject title" required>
+          <label for="subject-title" class="form-label">Give subject title</label>
+          <input type="text" id="subject-title" name="subject-title" class="form-input" placeholder="Subject title" required>
       </div>
-      
+  
       <div class="form-group">
-        <label class="form-label">Add your file</label>
-        <div class="upload-option">
-          <div class="upload-info">
-            <div class="upload-icon">
-              <img src="{% static 'img/upload.png' %}" alt="Upload icon">
-            </div>
-            <div class="upload-text">
-              <div class="upload-title">Upload a file</div>
-              <div class="upload-subtitle">PDF, DOCX, or PPT</div>
-            </div>
+          <label class="form-label">Add your file</label>
+          <div class="upload-option">
+              <div class="upload-info">
+                  <div class="upload-icon">
+                      <img src="{% static 'img/upload.png' %}" alt="Upload icon">
+                  </div>
+                  <div class="upload-text">
+                      <div class="upload-title">Upload a file</div>
+                      <div class="upload-subtitle">PDF, DOCX, or PPT</div>
+                  </div>
+              </div>
+              <label for="file-upload" class="upload-btn">
+                  <span>Choose file</span>
+                  <input id="file-upload" type="file" name="file-upload" accept=".pdf,.docx,.ppt,.pptx">
+              </label>
           </div>
-          <label for="file-upload" class="upload-btn">
-            <span>Choose file</span>
-            <input id="file-upload" type="file" accept=".pdf,.docx,.ppt,.pptx">
-          </label>
-        </div>
-        
-        <div class="form-divider">or</div>
-        
-        <div class="upload-option">
-          <div class="upload-info">
-            <div class="upload-icon">
-              <img src="{% static 'img/paste.png' %}" alt="Link icon">
-            </div>
-            <div class="upload-text">
-              <div class="upload-title">Paste a link</div>
-              <div class="upload-subtitle">Link to a website</div>
-            </div>
+  
+          <div class="form-divider">or</div>
+  
+          <div class="upload-option">
+              <div class="upload-info">
+                  <div class="upload-icon">
+                      <img src="{% static 'img/paste.png' %}" alt="Link icon">
+                  </div>
+                  <div class="upload-text">
+                      <div class="upload-title">Paste a link</div>
+                      <div class="upload-subtitle">Link to a website</div>
+                  </div>
+              </div>
+              <div class="link-input-group">
+                  <input type="url" class="link-input" name="link-input" placeholder="Paste URL here">
+                  <button type="button" class="link-btn">Add</button>
+              </div>
           </div>
-          <div class="link-input-group">
-            <input type="url" class="link-input" placeholder="Paste URL here">
-            <button type="button" class="link-btn">Add</button>
-          </div>
-        </div>
       </div>
-      
+  
       <div class="form-group">
-        <label for="additional-notes" class="form-label">Add additional points</label>
-        <textarea id="additional-notes" class="form-textarea" placeholder="Type or paste any extra points you wish to add"></textarea>
+          <label for="additional-notes" class="form-label">Add additional points</label>
+          <textarea id="additional-notes" name="additional-notes" class="form-textarea" placeholder="Type or paste any extra points you wish to add"></textarea>
       </div>
-      
+  
       <button type="submit" class="submit-btn">Generate notes</button>
-      
+  
       <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
-    </form>
+  </form>
     
-    <aside class="existing-notes-sidebar">
+    {% comment %} <aside class="existing-notes-sidebar">
       <div class="notes-header">Previously made Notes</div>
       <a href="#" class="note-item">Algebra</a>
       <a href="#" class="note-item">IT Project Management</a>
       <a href="#" class="note-item">DBMS</a>
       <a href="#" class="note-item">Computer Networks</a>
       <a href="#" class="note-item">Marketing Management</a>
-    </aside>
+    </aside> {% endcomment %}
   </main>
 </body>
 </html>
