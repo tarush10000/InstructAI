@@ -93,17 +93,15 @@
                         <div class="past-videos">
                             <h2 class="timestamps-heading">Past Videos</h2>
                             {% if past_videos %}
-                                <div class="overlap-group-2">
+                                <div class="video-list">
                                     {% for video in past_videos %}
                                         <div class="timestamp">
-                                            <a href="{% url 'video_view' video_filename=video.filename %}" class="text-wrapper-2">{{ video.name }}</a>
+                                            <a href="{% url 'video_view' video_filename=video.filename %}" class="video-link">
+                                                <span class="video-icon">🎥</span>
+                                                {{ video.name }}
+                                            </a>
                                         </div>
                                     {% endfor %}
-                                    <div class="ask-ai-button">
-                                        <button class="button">
-                                            <div class="container-3"><div class="text-wrapper-3">Ask AI</div></div>
-                                        </button>
-                                    </div>
                                 </div>
                             {% else %}
                                 <p class="no-videos">No videos have been generated yet.</p>

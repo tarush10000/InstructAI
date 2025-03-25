@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ video_name }} - InstructAI</title>
+    <link rel="stylesheet" href="{% static 'css/video.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="video-view-container">
+        <div class="video-wrapper">
+            <h1 class="video-title">{{ video_name }}</h1>
+            <video controls autoplay class="full-screen-video">
+                <source src="{{ video_path }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <div class="back-button-container">
+                <a href="{% url 'video' %}" class="back-to-list-btn">Back to Video List</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
