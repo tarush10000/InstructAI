@@ -8,6 +8,7 @@
     <title>InstructAI - Quiz Result</title>
     <link rel="stylesheet" href="{% static 'css/quizAttempt.css' %}">
     <style>
+        /* Existing styles */
         .results-container {
             margin-top: 20px;
         }
@@ -52,6 +53,42 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        /* Half-pie chart styles */
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .pie-chart-container {
+            position: relative;
+            width: 120px;
+            height: 60px; /* Half circle */
+            overflow: hidden;
+            border-radius: 60px 60px 0 0;
+            background-color: #eee;
+        }
+
+        .pie-chart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #28a745; /* Success color */
+            transform-origin: center bottom;
+            transform: rotate(-90deg); /* Start from the top */
+            clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%); /* Clip to half circle */
+        }
+
+        .score-text {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -73,44 +110,37 @@
     </header>
 
     <main class="quiz-container">
-        <div class="background-pattern">
-            <img class="pattern pattern-1" src="{% static 'img/pattern-1.png' %}" alt="">
-            <img class="pattern pattern-2" src="{% static 'img/pattern-2.png' %}" alt="">
-        </div>
-
         <div class="quiz-content">
-            <h2>Quiz Result</h2>
-            <p>Your Score: {{ score }} out of {{ total }}</p>
-
+            <div class="score-container">
+                <h1>Quiz Result</h1>
+                <p class="score-text">Your Score: {{ score }} out of {{ total }}</p>
+                <h1>Answer Key</h1>
+            </div>
             {% if questions and user_answers %}
             <div class="results-container">
-                {% for i in total_range %}
-                    {% with question=questions|get_item:i %}
+                {% for question in questions %}
                     <div class="question-result">
                         <p class="question-text">{{ question.question }}</p>
                         <div class="options-container">
+                            {% with user_answer_key='question_'|add:forloop.counter|stringformat:"d" %}
+                            {% with user_answer=user_answers|get_item:user_answer_key %}
+                            {% with correct_answer=question.correct_answer %}
                             {% for option_key, option_value in question.options.items %}
-                            {%with user_answer=user_answers|get_item:"question_"|add:i %}
-                                {% with correct_answer=question.correct_answer %}
-                                <div class="option 
+                                <div class="option
                                     {% if option_key == correct_answer %}correct-answer{% endif %}
                                     {% if option_key == user_answer and option_key != correct_answer %}incorrect-answer{% elif option_key == user_answer %}user-answer{% endif %}">
                                     <strong>{{ option_key }}:</strong> {{ option_value }}
-                                    {% if option_key == correct_answer %} <span style="font-weight: bold;">(Correct Answer)</span>{% endif %}
-                                    {% if option_key == user_answer and option_key != correct_answer %} <span style="font-weight: bold;">(Your Answer)</span>{% endif %}
-                                    {% if option_key == user_answer and option_key == correct_answer %} <span style="font-weight: bold;">(Your Answer)</span>{% endif %}
                                 </div>
-                                {% endwith %}
-                                {% endwith %}
                             {% endfor %}
+                            {% endwith %}
+                            {% endwith %}
+                            {% endwith %}
                         </div>
                     </div>
-                    {% endwith %}
                 {% endfor %}
             </div>
             {% endif %}
         </div>
     </main>
 </body>
-
 </html>

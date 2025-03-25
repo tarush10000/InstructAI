@@ -471,7 +471,7 @@ def submit_quiz(request):
 def quiz_result(request, score, total):
     questions = request.session.get('quiz_questions_display', [])
     user_answers = request.session.get('user_answers', {})  # Ensure it's a dictionary
-    formatted_answers = {f"question_{idx}": str(answer) for idx, answer in enumerate(user_answers.values())}
+    formatted_answers = {f"question_{idx + 1}": str(answer) for idx, answer in enumerate(user_answers.values())}
 
     context = {
         'score': score,
