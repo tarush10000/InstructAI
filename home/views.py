@@ -199,32 +199,52 @@ from pdfminer.high_level import extract_text as pdf_extract_text
 from docx import Document as DocxDocument
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Paragraph
 from reportlab.lib.units import inch
+import regex as re
+import logging
+import tempfile
+# ... other imports
 
+logger = logging.getLogger(__name__) #create a logger.
 @require_POST
 def generate_notes(request):
     topic_name = request.POST.get('subject-title')
     uploaded_file = request.FILES.get('file-upload')
     additional_notes = request.POST.get('additional-notes')
-    website_link = request.POST.get('link-input') # Assuming the link input has this name
+    website_link = request.POST.get('link-input')
 
     extracted_text = ""
 
     if uploaded_file:
         file_extension = os.path.splitext(uploaded_file.name)[1].lower()
         try:
+            logger.info(f"File uploaded: {uploaded_file.name}, Extension: {file_extension}")
             if file_extension == '.pdf':
-                extracted_text = pdf_extract_text(uploaded_file)
+                try:
+                    # Corrected line: Access the underlying file object
+                    uploaded_file.file.seek(0)
+                    with tempfile.NamedTemporaryFile(delete=False) as temp_pdf:
+                        for chunk in uploaded_file.chunks():
+                            temp_pdf.write(chunk)
+                        temp_pdf_path = temp_pdf.name
+                    extracted_text = pdf_extract_text(temp_pdf_path)
+                    os.unlink(temp_pdf_path) #delete the temp file.
+                    logger.info("PDF extracted successfully.")
+                except Exception as pdf_error:
+                    logger.error(f"PDF extraction error: {pdf_error}", exc_info=True)
+                    return HttpResponse(f"Error processing PDF file. Please ensure it is a valid, text-based PDF.")
             elif file_extension == '.docx':
                 doc = DocxDocument(uploaded_file)
                 for paragraph in doc.paragraphs:
                     extracted_text += paragraph.text + "\n"
-            # You can add support for other file types like .ppt or .txt if needed
-        except Exception as e:
-            return HttpResponse(f"Error processing file: {e}")
+            else:
+                return HttpResponse("Unsupported file type.")
 
+        except Exception as e:
+            logger.error(f"General error: {e}", exc_info=True)
+            return HttpResponse(f"Error processing file: {e}")
     all_inputs = f"Topic: {topic_name}\n\n"
     if extracted_text:
         all_inputs += f"Syllabus Content:\n{extracted_text}\n\n"
@@ -238,12 +258,26 @@ def generate_notes(request):
     model = genai.GenerativeModel("gemini-2.0-flash-lite")
 
     try:
-        response = model.generate_content(f"Generate comprehensive notes based on the following information:\n\n{all_inputs}")
+        prompt = f"""
+        Generate comprehensive notes based on the following information:
+
+        {all_inputs}
+
+        Format the notes with:
+        - Clear, large headings for main topics.
+        - Numbered lists for points.
+        - Clear paragraphs.
+        - Remove all special characters, formatting codes, and extra whitespace from the generated text.
+        - Clean the extracted text to create human readable notes.
+        """
+        response = model.generate_content(prompt)
         generated_notes = response.text
+        # Remove extra characters.
+        generated_notes = re.sub(r'[^a-zA-Z0-9\n\s.,:;-]', '', generated_notes)
+
     except Exception as e:
         return HttpResponse(f"Error generating notes with Gemini: {e}")
 
-    # Generate PDF
     notes_folder = 'notes_folder'
     os.makedirs(notes_folder, exist_ok=True)
     pdf_filename = f"{topic_name.replace(' ', '_')}_notes.pdf"
@@ -252,22 +286,28 @@ def generate_notes(request):
     c = canvas.Canvas(pdf_filepath, pagesize=letter)
     styles = getSampleStyleSheet()
     normal_style = styles['Normal']
-    line_height = 18
-    y_position = 750  # Starting Y position
+    heading_style = ParagraphStyle('Heading', parent=styles['Heading1'], fontSize=16, leading=20)
 
-    for line in generated_notes.splitlines():
-        p = Paragraph(line, normal_style)
-        p_width, p_height = p.wrapOn(c, letter[0] - 2 * inch, line_height * 1.2) # Adjust width as needed
-        if y_position - p_height < 50:  # Check for page bottom margin
+    y_position = 750
+
+    lines = generated_notes.splitlines()
+    for line in lines:
+        if len(line.split()) > 0 and all(word.istitle() for word in line.split()): #A better heading detection.
+            p = Paragraph(line, heading_style)
+        else:
+            p = Paragraph(line, normal_style)
+        p_width, p_height = p.wrapOn(c, letter[0] - 2 * inch, 0)
+        if y_position - p_height < 50:
             c.showPage()
             y_position = 750
         p.drawOn(c, inch, y_position - p_height)
-        y_position -= p_height + 6  # Add some spacing
+        y_position -= p_height + 6
 
     c.save()
 
     return HttpResponse(f"Notes for '{topic_name}' generated successfully and saved as <a href='/download_notes/{pdf_filename}'>'{pdf_filename}'</a>")
 
+#rest of the code remains the same.
 def notes_page(request):
     return render(request, 'home/notes.html')
 
