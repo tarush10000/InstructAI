@@ -15,12 +15,12 @@
                 </div>
                 <nav class="header-navigation">
                     <a href="/" class="header-nav-item header-home-nav-item">Home</a>
-                    <a href="#" class="header-nav-item">Features</a>
-                    <a href="#" class="header-nav-item">About Us</a>
-                    <a href="#" class="header-nav-item">Contact Us</a>
+                    <a href="#features" class="header-nav-item">Features</a>
+                    <a href="#about" class="header-nav-item">About Us</a>
+                    <a href="#contact" class="header-nav-item">Contact Us</a>
                 </nav>
                 <div class="header-auth">
-                    <a href = "{% url 'signup' %}">
+                    <a href = "{% url 'login' %}">
                         <button class="header-auth-button button-state-layer">
                             LOGIN / SIGN UP
                         </button>
@@ -66,7 +66,7 @@
                 </div>
             </section>
 
-            <section class="about-us-section">
+            <section id = "about" class="about-us-section">
                 <div class="about-us-container">
                     <h2 class="about-us-heading">
                         <span class="section-heading-primary">What is </span> <span class="section-heading-secondary">InstructAI?</span>
@@ -84,7 +84,7 @@
                 </div>
             </section>
 
-            <section class="features-section">
+            <section id="features" class="features-section">
                 <div class="features-container">
                     <h2 class="features-section-heading">
                         <span class="section-heading-primary">Why choose </span> <span class="section-heading-secondary">InstructAI?</span>
@@ -141,7 +141,7 @@
                 </div>
             </section>
 
-            <section class="contact-us-section">
+            <section id="contact" class="contact-us-section">
                 <div class="contact-us-container">
                     <h2 class="contact-section-heading">
                         <span class="section-heading-primary">Get in </span> <span class="section-heading-secondary">Touch</span>
