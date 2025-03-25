@@ -11,6 +11,8 @@ urlpatterns = [
     path('view_video/<str:video_filename>/', views.video_view, name='video_view'),
     path('quiz/', views.quiz_page, name='quiz'),
     path('notes/', views.notes_page, name='notes'),
+    path('generate_notes/', views.generate_notes, name='generate_notes'),
+    path('download_notes/<str:filename>/', views.download_notes, name='download_notes'),
     path('setting/', views.setting_page, name='setting'),
     path('interview/', views.interview_page, name='interview')
 ]

@@ -32,7 +32,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)  # Use renamed import
-            return redirect('home')
+            return render(request, 'home/dashboard.html')
     else:
         form = CustomUserCreationForm()
     
@@ -47,7 +47,7 @@ def login(request):  # Renamed from 'login'
         
         if user is not None:
             auth_login(request, user)  # Use renamed import
-            return redirect('home')
+            return render(request, 'home/dashboard.html')
         else:
             return render(request, 'home/login.html', {'error': 'Invalid credentials'})
     
@@ -169,7 +169,7 @@ def generate_script(extracted_text, topic):
     model = genai.GenerativeModel("gemini-2.0-flash")
     script = model.generate_content(
             f"For the given topic: {topic} "
-            f"Generate a 1 line video script based on the following text: {extracted_text}. You can also use content from outside the text to explain. The video script should be in 1st person narrator explaining what the concept is without the use of any other person in the explanation unless needed explicitly. JUST GENERATE THE SCRIPT. DO NOT GENERATE ANY INTRODUCTION, EXPLANATION etc.",
+            f"Generate a video script based on the following text: {extracted_text}. You can also use content from outside the text to explain. The video script should be in 1st person narrator explaining what the concept is without the use of any other person in the explanation unless needed explicitly. JUST GENERATE THE SCRIPT. DO NOT GENERATE ANY INTRODUCTION, EXPLANATION etc.",
         )
     return str(script)
 
@@ -186,3 +186,96 @@ def video_view(request, video_filename):
 
     return render(request, 'home/video_view.html', {'video_path': os.path.join(settings.MEDIA_URL, 'Video_Learning', video_filename), 'transcript': transcript_content})
 
+
+# Notes Module
+
+import os
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+import google.generativeai as genai
+from pdfminer.high_level import extract_text as pdf_extract_text
+from docx import Document as DocxDocument
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph
+from reportlab.lib.units import inch
+
+@require_POST
+def generate_notes(request):
+    topic_name = request.POST.get('subject-title')
+    uploaded_file = request.FILES.get('file-upload')
+    additional_notes = request.POST.get('additional-notes')
+    website_link = request.POST.get('link-input') # Assuming the link input has this name
+
+    extracted_text = ""
+
+    if uploaded_file:
+        file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+        try:
+            if file_extension == '.pdf':
+                extracted_text = pdf_extract_text(uploaded_file)
+            elif file_extension == '.docx':
+                doc = DocxDocument(uploaded_file)
+                for paragraph in doc.paragraphs:
+                    extracted_text += paragraph.text + "\n"
+            # You can add support for other file types like .ppt or .txt if needed
+        except Exception as e:
+            return HttpResponse(f"Error processing file: {e}")
+
+    all_inputs = f"Topic: {topic_name}\n\n"
+    if extracted_text:
+        all_inputs += f"Syllabus Content:\n{extracted_text}\n\n"
+    if additional_notes:
+        all_inputs += f"Additional Notes:\n{additional_notes}\n\n"
+    if website_link:
+        all_inputs += f"External Website Link: {website_link}\n\n"
+
+    api_key = settings.GEMINI_API_KEY
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-2.0-flash-lite")
+
+    try:
+        response = model.generate_content(f"Generate comprehensive notes based on the following information:\n\n{all_inputs}")
+        generated_notes = response.text
+    except Exception as e:
+        return HttpResponse(f"Error generating notes with Gemini: {e}")
+
+    # Generate PDF
+    notes_folder = 'notes_folder'
+    os.makedirs(notes_folder, exist_ok=True)
+    pdf_filename = f"{topic_name.replace(' ', '_')}_notes.pdf"
+    pdf_filepath = os.path.join(notes_folder, pdf_filename)
+
+    c = canvas.Canvas(pdf_filepath, pagesize=letter)
+    styles = getSampleStyleSheet()
+    normal_style = styles['Normal']
+    line_height = 18
+    y_position = 750  # Starting Y position
+
+    for line in generated_notes.splitlines():
+        p = Paragraph(line, normal_style)
+        p_width, p_height = p.wrapOn(c, letter[0] - 2 * inch, line_height * 1.2) # Adjust width as needed
+        if y_position - p_height < 50:  # Check for page bottom margin
+            c.showPage()
+            y_position = 750
+        p.drawOn(c, inch, y_position - p_height)
+        y_position -= p_height + 6  # Add some spacing
+
+    c.save()
+
+    return HttpResponse(f"Notes for '{topic_name}' generated successfully and saved as <a href='/download_notes/{pdf_filename}'>'{pdf_filename}'</a>")
+
+def notes_page(request):
+    return render(request, 'home/notes.html')
+
+def download_notes(request, filename):
+    file_path = os.path.join('notes_folder', filename)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+    return HttpResponse("File not found")
