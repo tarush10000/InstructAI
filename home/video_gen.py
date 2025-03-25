@@ -67,16 +67,21 @@ def detect_file_encoding(file_path):
 def wrap_text(text, max_width, font, font_size):
     wrapped_lines = []
     for line in text.splitlines():
-        words, current_line = line.split(),
-        for word in words:
-            test_line = " ".join(current_line + [word])
-            temp_clip = TextClip(text=test_line, font=font, font_size=font_size)
-            if temp_clip.size[0] > max_width:
-                wrapped_lines.append(" ".join(current_line))
-                current_line = [word]
-            else:
-                current_line.append(word)
-        wrapped_lines.append(" ".join(current_line))
+        split_line = line.split()
+        if split_line:  # Check if the split resulted in any words
+            words = split_line
+            current_line = []
+            for word in words:
+                test_line = " ".join(current_line + [word])
+                temp_clip = TextClip(text=test_line, font=font, font_size=font_size)
+                if temp_clip.size[0] > max_width:
+                    wrapped_lines.append(" ".join(current_line))
+                    current_line = [word]
+                else:
+                    current_line.append(word)
+            wrapped_lines.append(" ".join(current_line))
+        else:
+            wrapped_lines.append("")  # Append an empty string for empty lines
     return "\n".join(wrapped_lines)
 
 def normalize_audio(audio_clip):
@@ -115,11 +120,11 @@ def create_video(images_folder, audio_folder, sentences_file, bg_audio_folder, o
         if not bg_audios:
             raise FileNotFoundError("No background audio files found.")
 
-        clips, audio_clips, max_duration = [], [], 0
+        clips, audio_clips, max_duration =[],[], 0
 
         for i, sentence in enumerate(sentences, start=1):
             image_path = os.path.join(images_folder, f"{i}.jpg")
-            audio_path = os.path.join(audio_folder, f"{i}.wav")
+            audio_path = os.path.join(audio_folder, f"sentence_{i}.mp3") # Changed to .mp3
 
             if not os.path.isfile(image_path) or not os.path.isfile(audio_path):
                 continue
@@ -156,7 +161,7 @@ def create_video(images_folder, audio_folder, sentences_file, bg_audio_folder, o
             output_path, codec="libx264", audio_codec="aac", fps=24, preset="medium", audio_bitrate="192k"
         )
     except Exception as e:
-        logger.error(f"An error occurred: {e}", exc_info=True)
+        logger.error(f"An error occurred in create_video: {e}", exc_info=True)
 
 def trial(output_path): # Modified to accept output_path
     images_folder = "images"
@@ -259,7 +264,7 @@ def generate_image_prompt(sentence, idx, model, images_folder='images', script_t
     """Generate an image prompt for a sentence."""
     clear_cuda_cache()  # Clear CUDA cache before image generation
     try:
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-2.0-flash-lite")
         response = model.generate_content(
             f"Generate an image prompt for the sentence: {sentence} "
             f"which will be used in the background of a vertical reel video. Avoid having text in image unless necessary. JUST GENERATE 1 IMAGE PROMPT, NO EXPLANATION, NO DETAILS OR EXTRA PROMPTS. The whole context of script is: {script_text}"
@@ -300,7 +305,7 @@ def get_sentences(dialogues_text):
     response = model.generate_content(
         f"Split this video script into a list of sentences/dialogues: {dialogues_text} "
         "that would help the director visualize the scene and be used in the background of the video such that each of the text can be turned into an image prompt. "
-        "Each sentence in a new line with * in the beginning. Each sentence should be short and you can split 1 sentence into 2. Have a maximum of 30 sentences .JUST SPLIT THE SCRIPT, NO EXPLANATION, NO DETAILS OR EXTRA PROMPTS"
+        "Each sentence in a new line with * in the beginning. Each sentence should be short and you can split 1 sentence into 2. Have a maximum of 30 sentences .JUST SPLIT THE SCRIPT, NO EXPLANATION, NO DETAILS OR EXTRA PROMPTS OR INTRODUCTION"
     )
     sentences = [sentence.replace("*", "").strip().rstrip('.') for sentence in response.text.split("\n") if sentence.strip()]
     with open("sentences.txt", "w", encoding="utf-8") as f:
@@ -308,11 +313,15 @@ def get_sentences(dialogues_text):
     return sentences
 
 def generate_audio_sequentially(sentences, audio_folder):
-    """Generate audio sequentially for the given sentences."""
-    from TTS.api import TTS
-    tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=True)
+    """Generate audio sequentially for the given sentences using pyttsx3."""
+    engine = pyttsx3.init()  # Initialize pyttsx3 engine
+
     for idx, sentence in enumerate(sentences, start=1):
-        generate_audio_pyttsx3(tts, sentence, idx, audio_folder)
+        audio_filename = os.path.join(audio_folder, f"sentence_{idx}.mp3") # pyttsx3 can save to different formats depending on backend
+        engine.save_to_file(sentence, audio_filename)
+        engine.runAndWait() # Wait for the speech to finish before moving to the next sentence
+
+    engine.stop() # Clean up the engine
 
 import threading
 import queue
