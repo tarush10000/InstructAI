@@ -422,3 +422,48 @@ a {
     font-size: 14px;
   }
 }
+
+/* Video View Page Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+}
+
+.video-view-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.video-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.full-screen-video {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  max-height: 80vh;
+  background: #000;
+  object-fit: contain;
+}
+
+.debug-info {
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+  word-break: break-all;
+}
