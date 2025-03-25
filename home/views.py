@@ -15,7 +15,16 @@ from .forms import CustomUserCreationForm
 
 def home_page(request):
     return render(request, 'home/index.html')
-
+def quiz_page(request):
+    return render(request, 'home/quiz.html')
+def notes_page(request):
+    return render(request, 'home/notes.html')
+def setting_page(request):
+    return render(request, 'home/setting.html')
+def interview_page(request):
+    return render(request, 'home/interview.html')
+def video_page(request):
+    return render(request, 'home/video.html')
 def signup(request):
     if request.method == 'POST':
         print("chal agay")

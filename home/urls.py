@@ -9,4 +9,8 @@ urlpatterns = [
     path('video/', views.video_page, name='video'),
     path('generate/', views.generate_video, name='generate_video'),
     path('view_video/<str:video_filename>/', views.video_view, name='video_view'),
+    path('quiz/', views.quiz_page, name='quiz'),
+    path('notes/', views.notes_page, name='notes'),
+    path('setting/', views.setting_page, name='setting'),
+    path('interview/', views.interview_page, name='interview')
 ]

@@ -25,12 +25,12 @@
                             <div class="text">Pricing</div>
                         </div>
                         <div class="navbar">
-                            <div class="text-wrapper-7">Quizzes</div>
-                            <div class="text-wrapper-8">Interview</div>
-                            <div class="text-wrapper-9">Settings</div>
-                            <div class="text-wrapper-10">Videos</div>
-                            <div class="text-wrapper-11">Notes</div>
-                            <div class="text-wrapper-12">Dashboard</div>
+                            <a href="{% url 'quiz' %}"><div class="text-wrapper-7">Quizzes</div></a>
+                            <a href="{% url 'interview' %}"><div class="text-wrapper-8">Interview</div></a>
+                            <a href="{% url 'setting' %}"><div class="text-wrapper-9">Settings</div></a>
+                            <a href="{% url 'video' %}"><div class="text-wrapper-10">Videos</div></a>
+                            <a href="{% url 'notes' %}"><div class="text-wrapper-11">Notes</div></a>
+                            <a href="{% url 'home' %}"><div class="text-wrapper-12">Dashboard</div></a>
                         </div>
                     </div>
                     <div class="logout-button">
