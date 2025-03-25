@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InstructAI - Quiz</title>
+  <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="logo">InstructAI</h1>
+      
+      <nav class="main-nav">
+        <a href="{% url 'home' %}" class="nav-link">Dashboard</a>
+        <a href="{% url 'notes' %}" class="nav-link active">Notes</a>
+        <a href="{% url 'video' %}" class="nav-link">Videos</a>
+        <a href="{% url 'setting' %}" class="nav-link">Settings</a>
+        <a href="{% url 'interview' %}" class="nav-link">Interview</a>
+        <a href="{% url 'quiz' %}" class="nav-link">Quizzes</a>
+      </nav>
+      
+      <div class="header-right">
+        <button class="logout-btn">LOG OUT</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="quiz-container">
+    <div class="background-pattern">
+      <img class="pattern pattern-1" src="img/pattern-1.png" alt="">
+      <img class="pattern pattern-2" src="img/pattern-2.png" alt="">
+    </div>
+    
+    <div class="quiz-content">
+      <div class="quiz-info">
+        <div class="time-left">Time left: 2:39</div>
+        <div class="quiz-topic">Topic: Design Systems</div>
+      </div>
+      
+      <div class="question-container">
+        <div class="question-header">
+          <div class="question-number">Question 1 of 5</div>
+          <p class="question-text">Which of the following is not a benefit of using a design system?</p>
+        </div>
+        
+        <div class="answer-options">
+          <div class="answer-option">
+            <div class="option-content">
+              <div class="option-icon">
+                <img src="{% static 'img/a.png' %}" alt="A">
+              </div>
+              <div class="option-text">
+                <p class="option-answer">Consistent user experience across products</p>
+              </div>
+            </div>
+            <div class="option-selector"></div>
+          </div>
+          
+          <div class="answer-option">
+            <div class="option-content">
+              <div class="option-icon">
+                <img src="{% static 'img/b.png' %}" alt="B">
+              </div>
+              <div class="option-text">
+                <p class="option-answer">Faster development time</p>
+              </div>
+            </div>
+            <div class="option-selector"></div>
+          </div>
+          
+          <div class="answer-option">
+            <div class="option-content">
+              <div class="option-icon">
+                <img src="{% static 'img/c.png' %}" alt="C">
+              </div>
+              <div class="option-text">
+                <p class="option-answer">More bugs and errors</p>
+              </div>
+            </div>
+            <div class="option-selector"></div>
+          </div>
+          
+          <div class="answer-option">
+            <div class="option-content">
+              <div class="option-icon">
+                <img src="{% static 'img/d.png' %}" alt="D">
+              </div>
+              <div class="option-text">
+                <p class="option-answer">Improved collaboration between designers and developers</p>
+              </div>
+            </div>
+            <div class="option-selector"></div>
+          </div>
+        </div>
+        
+        <div class="quiz-controls">
+          <button class="next-btn">Next</button>
+          <button class="skip-btn">Skip</button>
+        </div>
+      </div>
+      
+      <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
+    </div>
+  </main>
+</body>
+</html>
