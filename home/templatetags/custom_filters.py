@@ -4,7 +4,7 @@ register = template.Library()
 
 @register.filter
 def get_item(dictionary, key):
-    return dictionary[key]
+    return dictionary.get(str(key))
 
 @register.filter
 def dict_items(dictionary):
@@ -16,8 +16,22 @@ def int_range(value):
     try:
         return range(int(value))
     except (ValueError, TypeError):
-        return
+        return []
 
 @register.filter
 def add(value, arg):
-    return value + arg
+    return str(value) + str(arg)
+
+@register.filter
+def multiply(value, arg):
+    try:
+        return value * arg
+    except (TypeError, ValueError):
+        return None
+
+@register.filter
+def divide(value, arg):
+    try:
+        return value / arg
+    except (TypeError, ValueError, ZeroDivisionError):
+        return None
