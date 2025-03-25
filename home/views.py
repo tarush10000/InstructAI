@@ -279,3 +279,166 @@ def download_notes(request, filename):
             response['Content-Disposition'] = f'attachment; filename="{filename}"'
             return response
     return HttpResponse("File not found")
+
+
+
+# Quiz Module
+
+import os
+import json
+import uuid
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+import google.generativeai as genai
+from docx import Document as DocxDocument
+from pptx import Presentation as PPTXPresentation
+from PyPDF2 import PdfReader
+
+def quiz_page(request):
+    return render(request, 'home/quiz.html')
+
+import json
+import re
+
+def extract_json_from_response(response_text):
+    json_match = None
+
+    # Try to find JSON enclosed in ```json and ```
+    code_block_match = re.search(r"```json\s*([\s\S]*?)\s*```", response_text)
+    if code_block_match:
+        json_match = code_block_match.group(1).strip()
+
+    # If not found, try to find JSON directly (assuming it starts with [ or {)
+    if not json_match:
+        direct_match = re.search(r"(\[[\s\S]*?\]|\{[\s\S]*?\})", response_text)
+        if direct_match:
+            json_match = direct_match.group(1).strip()
+
+    if json_match:
+        try:
+            return json.loads(json_match)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding extracted JSON: {e}")
+            print(f"Extracted JSON string: {json_match}")
+            return None
+    else:
+        print("No JSON found in the response text.")
+        print(f"Response Text: {response_text}")
+        return None
+
+@require_POST
+def start_quiz(request):
+    topic_name = request.POST.get('quiz-title')
+    uploaded_file = request.FILES.get('file-upload')
+    quiz_length = int(request.POST.get('quiz-length'))
+
+    extracted_text = ""
+    if uploaded_file:
+        file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+        try:
+            if file_extension == '.pdf':
+                pdf_reader = PdfReader(uploaded_file)
+                for page in pdf_reader.pages:
+                    extracted_text += page.extract_text() + "\n"
+            elif file_extension == '.docx':
+                doc = DocxDocument(uploaded_file)
+                for paragraph in doc.paragraphs:
+                    extracted_text += paragraph.text + "\n"
+            elif file_extension == '.ppt' or file_extension == '.pptx':
+                prs = PPTXPresentation(uploaded_file)
+                for slide in prs.slides:
+                    for shape in slide.shapes:
+                        if shape.has_text_frame:
+                            for paragraph in shape.text_frame.paragraphs:
+                                for run in paragraph.runs:
+                                    extracted_text += run.text + "\n"
+        except Exception as e:
+            return HttpResponse(f"Error processing file: {e}")
+
+    prompt = f"Generate {quiz_length} multiple-choice questions about '{topic_name}'. "
+    if extracted_text:
+        prompt += f"Use the following material as context:\n\n{extracted_text}\n\n"
+    prompt += "Each question should have four options (A, B, C, D) and clearly indicate the correct answer in the JSON format: [{'question': '...', 'options': {'A': '...', 'B': '...', 'C': '...', 'D': '...'}, 'correct_answer': '...'}]"
+
+    api_key = settings.GEMINI_API_KEY
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-2.0-flash-lite")
+
+    try:
+        response = model.generate_content(prompt)
+        print("Gemini API Response:")
+        print(response.text)
+        quiz_data = extract_json_from_response(response.text)
+
+        if quiz_data:
+            request.session['quiz_questions'] = quiz_data
+            # Save quiz data temporarily
+            quiz_session_id = uuid.uuid4()
+            video_learning_folder = 'Video_Learning'
+            os.makedirs(video_learning_folder, exist_ok=True)
+            temp_quiz_file_path = os.path.join(video_learning_folder, f"quiz_{quiz_session_id}.json")
+            with open(temp_quiz_file_path, 'w') as f:
+                json.dump(quiz_data, f, indent=4)
+            return redirect('quiz_attempt', quiz_session_id=quiz_session_id)
+        else:
+            return HttpResponse("Error: Could not extract valid JSON from the Gemini API response.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return HttpResponse(f"Error generating quiz: An unexpected error occurred. Check your server logs for details.")
+
+def quiz_attempt(request, quiz_session_id):
+    questions = request.session.get('quiz_questions')
+    if not questions:
+        return HttpResponse("Quiz questions not found.")
+    context = {'questions': questions, 'quiz_session_id': quiz_session_id}
+    return render(request, 'home/quizAttempt.html', context)
+
+@require_POST
+def submit_quiz(request):
+    quiz_session_id = request.POST.get('quiz_session_id')
+    questions = request.session.get('quiz_questions')
+    if not questions:
+        return HttpResponse("Quiz questions not found for submission.")
+
+    score = 0
+    total_questions = len(questions)
+    user_answers = request.POST.dict()
+    correct_answers = {}
+
+    for i, question_data in enumerate(questions):
+        correct_answers[f'question_{i+1}'] = question_data['correct_answer']
+        user_answer = user_answers.get(f'question_{i+1}')
+        if user_answer == question_data['correct_answer']:
+            score += 1
+
+    request.session['user_answers'] = user_answers
+    request.session['correct_answers'] = correct_answers
+    request.session['quiz_questions_display'] = questions # Keep questions for display
+
+    video_learning_folder = 'Video_Learning'
+    temp_quiz_file_path = os.path.join(video_learning_folder, f"quiz_{quiz_session_id}.json")
+    try:
+        os.remove(temp_quiz_file_path)
+    except FileNotFoundError:
+        print(f"Temporary quiz file not found: {temp_quiz_file_path}")
+    except Exception as e:
+        print(f"Error removing temporary quiz file: {e}")
+
+    return redirect('quiz_result', score=score, total=total_questions)
+
+def quiz_result(request, score, total):
+    questions = request.session.get('quiz_questions_display', [])
+    user_answers = request.session.get('user_answers', {})  # Ensure it's a dictionary
+    formatted_answers = {f"question_{idx}": str(answer) for idx, answer in enumerate(user_answers.values())}
+
+    context = {
+        'score': score,
+        'total': total,
+        'questions': questions,
+        'user_answers': formatted_answers,
+        'total_range': range(total)  # Add this to avoid filter issues
+    }
+    return render(request, 'home/quizResult.html', context)
+

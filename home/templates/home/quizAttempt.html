@@ -2,107 +2,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InstructAI - Quiz</title>
-  <link rel="stylesheet" href="{% static 'css/quizAttempt.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructAI - Quiz</title>
+    <link rel="stylesheet" href="{% static 'css/quizAttempt.css' %}">
+    <script>
+        // JavaScript for timer and answer highlighting will go here
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "Time left: " + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    // Timer expired, submit the form or handle accordingly
+                    document.getElementById("quiz-form").submit();
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            var fiveMinutes = 60 * 5,
+                display = document.querySelector('.time-left');
+            startTimer(fiveMinutes, display);
+        };
+
+        function checkAnswer(questionNumber, selectedAnswer, correctAnswer) {
+            const options = document.querySelectorAll(`.question-${questionNumber} .answer-option`);
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                const optionInput = option.querySelector('input');
+                if (optionInput.value === correctAnswer) {
+                    option.classList.add('correct');
+                }
+                if (optionInput.value === selectedAnswer && selectedAnswer !== correctAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        function submitQuiz() {
+            // You might want to disable further answer changes here
+            document.getElementById("quiz-form").submit();
+        }
+    </script>
 </head>
 <body>
-  <header class="header">
-    <div class="header-content">
-      <h1 class="logo">InstructAI</h1>
-      
-      <nav class="main-nav">
-        <a href="{% url 'home' %}" class="nav-link">Dashboard</a>
-        <a href="{% url 'notes' %}" class="nav-link active">Notes</a>
-        <a href="{% url 'video' %}" class="nav-link">Videos</a>
-        <a href="{% url 'setting' %}" class="nav-link">Settings</a>
-        <a href="{% url 'interview' %}" class="nav-link">Interview</a>
-        <a href="{% url 'quiz' %}" class="nav-link">Quizzes</a>
-      </nav>
-      
-      <div class="header-right">
-        <button class="logout-btn">LOG OUT</button>
-      </div>
-    </div>
-  </header>
+    {% comment %} {% include 'home/header.html' %} {% endcomment %}
+    <main class="quiz-container">
+        <div class="background-pattern">
+            <img class="pattern pattern-1" src="{% static 'img/pattern-1.png' %}" alt="">
+            <img class="pattern pattern-2" src="{% static 'img/pattern-2.png' %}" alt="">
+        </div>
 
-  <main class="quiz-container">
-    <div class="background-pattern">
-      <img class="pattern pattern-1" src="img/pattern-1.png" alt="">
-      <img class="pattern pattern-2" src="img/pattern-2.png" alt="">
-    </div>
-    
-    <div class="quiz-content">
-      <div class="quiz-info">
-        <div class="time-left">Time left: 2:39</div>
-        <div class="quiz-topic">Topic: Design Systems</div>
-      </div>
-      
-      <div class="question-container">
-        <div class="question-header">
-          <div class="question-number">Question 1 of 5</div>
-          <p class="question-text">Which of the following is not a benefit of using a design system?</p>
+        <div class="quiz-content">
+            <div class="quiz-info">
+                <div class="time-left">Time left: 5:00</div>
+                {% if questions %}
+                <div class="quiz-topic">Topic: {{ questions.0.question|slice:":30" }}...</div>
+                {% endif %}
+            </div>
+
+            <form id="quiz-form" class="question-container" action="{% url 'submit_quiz' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="quiz_session_id" value="{{ quiz_session_id }}">
+                {% if questions %}
+                    {% for question_data in questions %}
+                    <div class="question-header question-{{ forloop.counter }}">
+                        <div class="question-number">Question {{ forloop.counter }} of {{ questions|length }}</div>
+                        <p class="question-text">{{ question_data.question }}</p>
+                    </div>
+
+                    <div class="answer-options">
+                        {% for option_key, option_value in question_data.options.items %}
+                        <label class="answer-option">
+                            <div class="option-content">
+                                <div class="option-icon">
+                                    <img src="{% static 'img/' %}{{ option_key|lower }}.png" alt="{{ option_key }}">
+                                </div>
+                                <div class="option-text">
+                                    <input type="radio" name="question_{{ forloop.parentloop.counter }}" value="{{ option_key }}" onclick="checkAnswer({{ forloop.parentloop.counter }}, this.value, '{{ question_data.correct_answer }}')">
+                                    <p class="option-answer">{{ option_value }}</p>
+                                </div>
+                            </div>
+                            <div class="option-selector"></div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <div class="quiz-controls">
+                        <button type="submit" class="submit-btn">Submit Quiz</button>
+                    </div>
+                {% else %}
+                    <p>No questions found.</p>
+                {% endif %}
+            </form>
+
+            <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
         </div>
-        
-        <div class="answer-options">
-          <div class="answer-option">
-            <div class="option-content">
-              <div class="option-icon">
-                <img src="{% static 'img/a.png' %}" alt="A">
-              </div>
-              <div class="option-text">
-                <p class="option-answer">Consistent user experience across products</p>
-              </div>
-            </div>
-            <div class="option-selector"></div>
-          </div>
-          
-          <div class="answer-option">
-            <div class="option-content">
-              <div class="option-icon">
-                <img src="{% static 'img/b.png' %}" alt="B">
-              </div>
-              <div class="option-text">
-                <p class="option-answer">Faster development time</p>
-              </div>
-            </div>
-            <div class="option-selector"></div>
-          </div>
-          
-          <div class="answer-option">
-            <div class="option-content">
-              <div class="option-icon">
-                <img src="{% static 'img/c.png' %}" alt="C">
-              </div>
-              <div class="option-text">
-                <p class="option-answer">More bugs and errors</p>
-              </div>
-            </div>
-            <div class="option-selector"></div>
-          </div>
-          
-          <div class="answer-option">
-            <div class="option-content">
-              <div class="option-icon">
-                <img src="{% static 'img/d.png' %}" alt="D">
-              </div>
-              <div class="option-text">
-                <p class="option-answer">Improved collaboration between designers and developers</p>
-              </div>
-            </div>
-            <div class="option-selector"></div>
-          </div>
-        </div>
-        
-        <div class="quiz-controls">
-          <button class="next-btn">Next</button>
-          <button class="skip-btn">Skip</button>
-        </div>
-      </div>
-      
-      <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
-    </div>
-  </main>
+    </main>
 </body>
 </html>

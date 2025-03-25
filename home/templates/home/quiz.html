@@ -2,113 +2,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InstructAI - Create Quiz</title>
-  <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructAI - Create Quiz</title>
+    <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
 </head>
 <body>
-  <header class="header">
-    <div class="header-content">
-      <h1 class="logo">InstructAI</h1>
-      
-      <nav class="main-nav">
-        <a href="{% url 'home' %}"><div class="nav-link">Dashboard</div></a>
-        <a href="{% url 'quiz' %}"><div class="nav-link-active">Quizzes</div></a>
-        <a href="{% url 'interview' %}"><div class="nav-link">Interview</div></a>
-        <a href="{% url 'setting' %}"><div class="nav-link">Settings</div></a>
-        <a href="{% url 'video' %}"><div class="nav-link">Videos</div></a>
-        <a href="{% url 'notes' %}"><div class="nav-link">Notes</div></a>
-      </nav>
-      
-      <div class="header-right">
-        <button class="logout-btn">LOG OUT</button>
-      </div>
-    </div>
-  </header>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">InstructAI</h1>
 
-  <main class="quiz-container">
-    <div class="background-pattern">
-      <img class="pattern pattern-1" src="img/pattern-1.png" alt="">
-      <img class="pattern pattern-2" src="img/pattern-2.png" alt="">
-    </div>
-    
-    <form class="quiz-form" action="#" method="post" enctype="multipart/form-data">
-      <h2 class="form-title">Enter Quiz Topic</h2>
-      
-      <div class="form-group">
-        <label for="quiz-title" class="form-label">Give topic title</label>
-        <input type="text" id="quiz-title" class="form-input" placeholder="Topic title" required>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">Add your file</label>
-        <div class="upload-option">
-          <div class="upload-info">
-            <div class="upload-icon">
-              <img src="{% static 'img/upload.png' %}" alt="Upload icon">
-            </div>
-            <div class="upload-text">
-              <div class="upload-title">Upload a file</div>
-              <div class="upload-subtitle">PDF, DOCX, or PPT</div>
-            </div>
-          </div>
-          <label for="file-upload" class="upload-btn">
-            <span>Choose file</span>
-            <input id="file-upload" type="file" accept=".pdf,.docx,.ppt,.pptx">
-          </label>
-        </div>
-        
-        <div class="form-divider">or</div>
-        
-        <div class="upload-option">
-          <div class="upload-info">
-            <div class="upload-icon">
-              <img src="{% static 'img/paste.png' %}" alt="Link icon">
-            </div>
-            <div class="upload-text">
-              <div class="upload-title">Paste a link</div>
-              <div class="upload-subtitle">Link to a website</div>
-            </div>
-          </div>
-          <div class="link-input-group">
-            <input type="url" class="link-input" placeholder="Paste URL here">
-            <button type="button" class="link-btn">Add</button>
-          </div>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">Select Quiz Length</label>
-        <div class="quiz-length-options">
-          <label class="quiz-length-option">
-            <input type="radio" name="quiz-length" value="5" checked>
-            <span class="radio-custom"></span>
-            <span class="option-label">5 questions/topic</span>
-          </label>
-          <label class="quiz-length-option">
-            <input type="radio" name="quiz-length" value="10">
-            <span class="radio-custom"></span>
-            <span class="option-label">10 questions/topic</span>
-          </label>
-          <label class="quiz-length-option">
-            <input type="radio" name="quiz-length" value="15">
-            <span class="radio-custom"></span>
-            <span class="option-label">15 questions/topic</span>
-          </label>
-          <label class="quiz-length-option">
-            <input type="radio" name="quiz-length" value="20">
-            <span class="radio-custom"></span>
-            <span class="option-label">20 questions/topic</span>
-          </label>
-        </div>
-      </div>
-      
-      <button type="submit" class="submit-btn">Start Quiz</button>
-      
-      <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
-    </form>
+            <nav class="main-nav">
+                <a href="{% url 'home' %}"><div class="nav-link">Dashboard</div></a>
+                <a href="{% url 'quiz' %}"><div class="nav-link-active">Quizzes</div></a>
+                <a href="{% url 'interview' %}"><div class="nav-link">Interview</div></a>
+                <a href="{% url 'setting' %}"><div class="nav-link">Settings</div></a>
+                <a href="{% url 'video' %}"><div class="nav-link">Videos</div></a>
+                <a href="{% url 'notes' %}"><div class="nav-link">Notes</div></a>
+            </nav>
 
-  </main>
+            <div class="header-right">
+                <button class="logout-btn">LOG OUT</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="quiz-container">
+        <div class="background-pattern">
+            <img class="pattern pattern-1" src="{% static 'img/pattern-1.png' %}" alt="">
+            <img class="pattern pattern-2" src="{% static 'img/pattern-2.png' %}" alt="">
+        </div>
+
+        <form class="quiz-form" action="{% url 'start_quiz' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="form-title">Enter Quiz Topic</h2>
+
+            <div class="form-group">
+                <label for="quiz-title" class="form-label">Give topic title</label>
+                <input type="text" id="quiz-title" name="quiz-title" class="form-input" placeholder="Topic title" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Add your file</label>
+                <div class="upload-option">
+                    <div class="upload-info">
+                        <div class="upload-icon">
+                            <img src="{% static 'img/upload.png' %}" alt="Upload icon">
+                        </div>
+                        <div class="upload-text">
+                            <div class="upload-title">Upload a file</div>
+                            <div class="upload-subtitle">PDF, DOCX, or PPT</div>
+                        </div>
+                    </div>
+                    <label for="file-upload" class="upload-btn">
+                        <span>Choose file</span>
+                        <input id="file-upload" type="file" name="file-upload" accept=".pdf,.docx,.ppt,.pptx">
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Quiz Length</label>
+                <div class="quiz-length-options">
+                    <label class="quiz-length-option">
+                        <input type="radio" name="quiz-length" value="5" checked>
+                        <span class="radio-custom"></span>
+                        <span class="option-label">5 questions/topic</span>
+                    </label>
+                    <label class="quiz-length-option">
+                        <input type="radio" name="quiz-length" value="10">
+                        <span class="radio-custom"></span>
+                        <span class="option-label">10 questions/topic</span>
+                    </label>
+                    <label class="quiz-length-option">
+                        <input type="radio" name="quiz-length" value="15">
+                        <span class="radio-custom"></span>
+                        <span class="option-label">15 questions/topic</span>
+                    </label>
+                    <label class="quiz-length-option">
+                        <input type="radio" name="quiz-length" value="20">
+                        <span class="radio-custom"></span>
+                        <span class="option-label">20 questions/topic</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Start Quiz</button>
+
+            <p class="copyright">© 2025 InstructAI. All Rights Reserved.</p>
+        </form>
+
+    </main>
 </body>
 </html>

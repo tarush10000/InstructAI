@@ -1,0 +1,116 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructAI - Quiz Result</title>
+    <link rel="stylesheet" href="{% static 'css/quizAttempt.css' %}">
+    <style>
+        .results-container {
+            margin-top: 20px;
+        }
+
+        .question-result {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options-container {
+            margin-left: 20px;
+        }
+
+        .option {
+            margin-bottom: 5px;
+            padding: 8px;
+            border-radius: 3px;
+        }
+
+        .correct-answer {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .user-answer {
+            background-color: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">InstructAI</h1>
+            <nav class="main-nav">
+                <a href="{% url 'home' %}"><div class="nav-link">Dashboard</div></a>
+                <a href="{% url 'quiz' %}"><div class="nav-link">Quizzes</div></a>
+                <a href="{% url 'interview' %}"><div class="nav-link">Interview</div></a>
+                <a href="{% url 'setting' %}"><div class="nav-link">Settings</div></a>
+                <a href="{% url 'video' %}"><div class="nav-link">Videos</div></a>
+                <a href="{% url 'notes' %}"><div class="nav-link">Notes</div></a>
+            </nav>
+            <div class="header-right">
+                <button class="logout-btn">LOG OUT</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="quiz-container">
+        <div class="background-pattern">
+            <img class="pattern pattern-1" src="{% static 'img/pattern-1.png' %}" alt="">
+            <img class="pattern pattern-2" src="{% static 'img/pattern-2.png' %}" alt="">
+        </div>
+
+        <div class="quiz-content">
+            <h2>Quiz Result</h2>
+            <p>Your Score: {{ score }} out of {{ total }}</p>
+
+            {% if questions and user_answers %}
+            <div class="results-container">
+                {% for i in total_range %}
+                    {% with question=questions|get_item:i %}
+                    <div class="question-result">
+                        <p class="question-text">{{ question.question }}</p>
+                        <div class="options-container">
+                            {% for option_key, option_value in question.options.items %}
+                            {%with user_answer=user_answers|get_item:"question_"|add:i %}
+                                {% with correct_answer=question.correct_answer %}
+                                <div class="option 
+                                    {% if option_key == correct_answer %}correct-answer{% endif %}
+                                    {% if option_key == user_answer and option_key != correct_answer %}incorrect-answer{% elif option_key == user_answer %}user-answer{% endif %}">
+                                    <strong>{{ option_key }}:</strong> {{ option_value }}
+                                    {% if option_key == correct_answer %} <span style="font-weight: bold;">(Correct Answer)</span>{% endif %}
+                                    {% if option_key == user_answer and option_key != correct_answer %} <span style="font-weight: bold;">(Your Answer)</span>{% endif %}
+                                    {% if option_key == user_answer and option_key == correct_answer %} <span style="font-weight: bold;">(Your Answer)</span>{% endif %}
+                                </div>
+                                {% endwith %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+
+</html>
