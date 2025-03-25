@@ -22,11 +22,12 @@
         <nav class="main-nav">
           <ul class="nav-links">
             <li class="active"><a href="#">Dashboard</a></li>
-            <li><a href="#">Notes</a></li>
-            <li><a href="#">Videos</a></li>
-            <li><a href="#">Quizzes</a></li>
-            <li><a href="#">Interview</a></li>
-            <li><a href="#">Settings</a></li>
+            <li><a href="{% url 'quiz' %}"><div class="text-wrapper-7">Quizzes</div></a></li>
+            <li><a href="{% url 'interview' %}"><div class="text-wrapper-8">Interview</div></a></li>
+            <li><a href="{% url 'setting' %}"><div class="text-wrapper-9">Settings</div></a></li>
+            <li><a href="{% url 'video' %}"><div class="text-wrapper-10">Videos</div></a></li>
+            <li><a href="{% url 'notes' %}"><div class="text-wrapper-11">Notes</div></a></li>
+            <li><a href="{% url 'home' %}"><div class="text-wrapper-12">Dashboard</div></a></li>
           </ul>
         </nav>
         <button class="logout-btn">LOG OUT</button>

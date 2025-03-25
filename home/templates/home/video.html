@@ -3,150 +3,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Video Generation</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        .container {
-            display: flex;
-            gap: 20px;
-        }
-        .form-section {
-            flex: 1;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 5px;
-        }
-        .past-videos {
-            flex: 1;
-            margin-top: 0; /* Remove top margin */
-            border-top: none; /* Remove top border */
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 5px;
-        }
-        .past-videos h2 {
-            margin-bottom: 10px;
-        }
-        .past-videos ul {
-            list-style: none;
-            padding: 0;
-        }
-        .past-videos li {
-            margin-bottom: 5px;
-        }
-        .past-videos a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        .past-videos a:hover {
-            text-decoration: underline;
-        }
-        .progress-bar-container {
-            width: 100%;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-        .progress-bar {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1%;
-            text-align: center;
-            border-radius: 5px;
-            width: 0%; /* Initial width */
-        }
-        .success-message {
-            color: green;
-            margin-top: 10px;
-        }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructAI Video Generator</title>
+    <link rel="stylesheet" href="{% static 'css/video.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
-    <main class="main-content">
-        <div class="container">
-            <section class="form-section">
-                <div class="form-container">
-                    <h1>Generate a Video</h1>
-                    <form method="post" enctype="multipart/form-data" action="{% url 'generate_video' %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            {{ form.topic.label_tag }}
-                            {{ form.topic }}
-                            {% if form.topic.errors %}
-                                <div class="error">{{ form.topic.errors }}</div>
-                            {% endif %}
+    <div class="video-player">
+        <div class="div">
+            <div class="overlap">
+                <div class="background-pattern">
+                    <div class="overlap-group"><img class="pattern" src="{% static 'img/pattern-2.png' %}" /></div>
+                </div>
+                
+                <header class="header">
+                    <div class="overlap-2">
+                        <div class="frame">
+                            <div class="text">Products</div>
+                            <div class="text">Resources</div>
+                            <div class="text">Pricing</div>
                         </div>
-                        <div class="form-group">
-                            {{ form.files.label_tag }}
-                            {{ form.files }}
-                            {% if form.files.errors %}
-                                <div class="error">{{ form.files.errors }}</div>
-                            {% endif %}
+                        <div class="navbar">
+                            <a href="{% url 'quiz' %}"><div class="text-wrapper-7">Quizzes</div></a>
+                            <a href="{% url 'interview' %}"><div class="text-wrapper-8">Interview</div></a>
+                            <a href="{% url 'setting' %}"><div class="text-wrapper-9">Settings</div></a>
+                            <a href="{% url 'video' %}"><div class="text-wrapper-10">Videos</div></a>
+                            <a href="{% url 'notes' %}"><div class="text-wrapper-11">Notes</div></a>
+                            <a href="{% url 'home' %}"><div class="text-wrapper-12">Dashboard</div></a>
                         </div>
-                        <button type="submit" class="button-state-layer">Generate Video</button>
-                    </form>
-
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="video-progress">0%</div>
                     </div>
-
-                    {% if generation_success %}
-                        <p class="success-message">Video generation successful! Check the list below.</p>
-                    {% endif %}
-                    {% if errors %}
-                        <div class="error-message">
-                            {% for field, error_list in errors.items %}
-                                {% for error in error_list %}
-                                    <p>{{ field|capfirst }}: {{ error }}</p>
-                                {% endfor %}
-                            {% endfor %}
+                    <div class="logout-button">
+                        <div class="state-layer-wrapper">
+                            <div class="state-layer"><div class="label-text">LOG OUT</div></div>
                         </div>
-                    {% endif %}
-                </div>
-            </section>
+                    </div>
+                    <div class="text-wrapper-13">InstructAI</div>
+                </header>
 
-            <section class="past-videos">
+                <!-- Main Content Area -->
                 <div class="container">
-                    <h2>Past Videos</h2>
-                    {% if past_videos %}
-                        <ul>
-                            {% for video in past_videos %}
-                                <li><a href="{% url 'video_view' video_filename=video.filename %}">{{ video.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No videos have been generated yet.</p>
-                    {% endif %}
+                    <div class="video-title">Generate a New Video</div>
+                    
+                    <div class="container-2">
+                        <!-- Video Generation Form -->
+                        <div class="form-container">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'generate_video' %}" class="video-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="{{ form.topic.id_for_label }}">Topic</label>
+                                    {{ form.topic }}
+                                    {% if form.topic.errors %}
+                                        <div class="error">{{ form.topic.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="{{ form.files.id_for_label }}">Upload Files</label>
+                                    {{ form.files }}
+                                    {% if form.files.errors %}
+                                        <div class="error">{{ form.files.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <button type="submit" class="button-state-layer">
+                                    <div class="container-3"><div class="text-wrapper-3">Generate Video</div></div>
+                                </button>
+                            </form>
+
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="video-progress">0%</div>
+                            </div>
+
+                            {% if generation_success %}
+                                <p class="success-message">Video generation successful! Check the list below.</p>
+                            {% endif %}
+                            {% if errors %}
+                                <div class="error-message">
+                                    {% for field, error_list in errors.items %}
+                                        {% for error in error_list %}
+                                            <p>{{ field|capfirst }}: {{ error }}</p>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Past Videos Section -->
+                        <div class="past-videos">
+                            <h2 class="timestamps-heading">Past Videos</h2>
+                            {% if past_videos %}
+                                <div class="overlap-group-2">
+                                    {% for video in past_videos %}
+                                        <div class="timestamp">
+                                            <a href="{% url 'video_view' video_filename=video.filename %}" class="text-wrapper-2">{{ video.name }}</a>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="ask-ai-button">
+                                        <button class="button">
+                                            <div class="container-3"><div class="text-wrapper-3">Ask AI</div></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="no-videos">No videos have been generated yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script>
-        // Basic progress bar simulation (replace with actual progress updates)
+        // Progress bar simulation
         document.addEventListener('DOMContentLoaded', function() {
             const progressBar = document.getElementById('video-progress');
-            let width = 0;
-            function updateProgress() {
-                if (width < 100) {
-                    width++;
-                    progressBar.style.width = width + '%';
-                    progressBar.innerText = width + '%';
-                    setTimeout(updateProgress, 200); // Simulate progress
-                } else {
-                    progressBar.innerText = 'Complete!';
+            const form = document.querySelector('.video-form');
+            
+            form.addEventListener('submit', function() {
+                let width = 0;
+                function updateProgress() {
+                    if (width < 100) {
+                        width++;
+                        progressBar.style.width = width + '%';
+                        progressBar.innerText = width + '%';
+                        setTimeout(updateProgress, 200);
+                    } else {
+                        progressBar.innerText = 'Complete!';
+                    }
                 }
-            }
-            // You would trigger this function when video generation starts
-            // For this example, we'll just start it after the page loads
-            // updateProgress(); // Uncomment this to see a simulation on page load
+                updateProgress();
+            });
         });
     </script>
 </body>
