@@ -159,6 +159,3 @@ TEMPLATES = [
         },
     },
 ]
-
-MEDIA_URL = '/Video_Learning/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

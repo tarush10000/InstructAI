@@ -71,10 +71,6 @@
                                 </button>
                             </form>
 
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="video-progress">0%</div>
-                            </div>
-
                             {% if generation_success %}
                                 <p class="success-message">Video generation successful! Check the list below.</p>
                             {% endif %}
@@ -113,27 +109,5 @@
         </div>
     </div>
 
-    <script>
-        // Progress bar simulation
-        document.addEventListener('DOMContentLoaded', function() {
-            const progressBar = document.getElementById('video-progress');
-            const form = document.querySelector('.video-form');
-            
-            form.addEventListener('submit', function() {
-                let width = 0;
-                function updateProgress() {
-                    if (width < 100) {
-                        width++;
-                        progressBar.style.width = width + '%';
-                        progressBar.innerText = width + '%';
-                        setTimeout(updateProgress, 200);
-                    } else {
-                        progressBar.innerText = 'Complete!';
-                    }
-                }
-                updateProgress();
-            });
-        });
-    </script>
 </body>
 </html>

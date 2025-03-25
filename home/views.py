@@ -7,7 +7,6 @@ from django.conf import settings
 from .forms import VideoGenerationForm
 import importlib.util
 import sys
-from django.http import Http404
 
 # Create your views here.
 from django.contrib.auth import login as auth_login
@@ -175,28 +174,26 @@ def generate_script(extracted_text, topic):
     return str(script)
 
 def video_view(request, video_filename):
-    # Construct full paths
-    VIDEO_LEARNING_DIR = os.path.join(settings.MEDIA_ROOT, 'Video_Learning')
     video_path = os.path.join(VIDEO_LEARNING_DIR, video_filename)
-    
-    # Check if the video file exists
-    if not os.path.exists(video_path):
-        raise Http404(f"Video file {video_filename} not found")
-    
-    # Check file size and permissions
-    file_size = os.path.getsize(video_path)
-    print(f"Video file size: {file_size} bytes")
+    transcript_filename = video_filename.replace('_video.mp4', '_transcript.txt')
+    transcript_path = os.path.join(VIDEO_LEARNING_DIR, transcript_filename)
     
     # Extract video name from filename
     video_name = video_filename[:-4].replace('_', ' ').title()
     
-    # Construct the URL path for the video
-    video_url = os.path.join(settings.MEDIA_URL, 'Video_Learning', video_filename)
-    
+    transcript_content = ""
+    try:
+        with open(transcript_path, 'r', encoding='utf-8') as f:
+            transcript_content = f.read()
+    except FileNotFoundError:
+        transcript_content = "Transcript not found."
+    except Exception as e:
+        transcript_content = f"Error reading transcript: {e}"
+
     return render(request, 'home/video_view.html', {
-        'video_path': video_url,
-        'full_server_path': video_path,
-        'video_name': video_name,
+        'video_path': os.path.join(settings.MEDIA_URL, 'Video_Learning', video_filename),
+        'transcript': transcript_content,
+        'video_name': video_name
     })
 
 
