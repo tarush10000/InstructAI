@@ -13,7 +13,7 @@
       <h1 class="logo">InstructAI</h1>
       
       <nav class="main-nav">
-        <a href="{% url 'home' %}" class="nav-link">Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
         <a href="{% url 'notes' %}" class="nav-link active">Notes</a>
         <a href="{% url 'video' %}" class="nav-link">Videos</a>
         <a href="{% url 'setting' %}" class="nav-link">Settings</a>
@@ -22,16 +22,12 @@
       </nav>
       
       <div class="header-right">
-        <button class="logout-btn">LOG OUT</button>
+        <a  href = "{% url 'login' %}" style = "margin-right: 0px"><button class="logout-btn">LOG OUT</button></a>
       </div>
     </div>
   </header>
 
   <main class="notes-container">
-    <div class="background-pattern">
-      <img class="pattern pattern-1" src="img/pattern-1.png" alt="">
-      <img class="pattern pattern-2" src="img/pattern-2.png" alt="">
-    </div>
     
     <form class="notes-form" action="{% url 'generate_notes' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}

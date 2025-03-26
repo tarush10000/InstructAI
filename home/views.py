@@ -32,7 +32,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)  # Use renamed import
-            return render(request, 'home/dashboard.html')
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
     
@@ -47,7 +47,7 @@ def login(request):  # Renamed from 'login'
         
         if user is not None:
             auth_login(request, user)  # Use renamed import
-            return render(request, 'home/dashboard.html')
+            return redirect('dashboard')
         else:
             return render(request, 'home/login.html', {'error': 'Invalid credentials'})
     
@@ -55,10 +55,6 @@ def login(request):  # Renamed from 'login'
 
 def home(request):
     return render(request, 'home/dashboard.html')
-
-# Removed the direct imports of video_gen
-# from .video_gen import *
-# from . import video_gen
 
 VIDEO_LEARNING_DIR = os.path.join(settings.MEDIA_ROOT, 'Video_Learning')
 os.makedirs(VIDEO_LEARNING_DIR, exist_ok=True)
@@ -173,14 +169,18 @@ def generate_script(extracted_text, topic):
         )
     return str(script)
 
+from django.http import FileResponse, Http404
+
+VIDEO_LEARNING_DIR = os.path.join(settings.BASE_DIR, 'Video_Learning')
+
 def video_view(request, video_filename):
-    video_path = os.path.join(VIDEO_LEARNING_DIR, video_filename)
+    video_path_on_disk = os.path.join(VIDEO_LEARNING_DIR, video_filename)
     transcript_filename = video_filename.replace('_video.mp4', '_transcript.txt')
     transcript_path = os.path.join(VIDEO_LEARNING_DIR, transcript_filename)
-    
+
     # Extract video name from filename
     video_name = video_filename[:-4].replace('_', ' ').title()
-    
+
     transcript_content = ""
     try:
         with open(transcript_path, 'r', encoding='utf-8') as f:
@@ -189,12 +189,22 @@ def video_view(request, video_filename):
         transcript_content = "Transcript not found."
     except Exception as e:
         transcript_content = f"Error reading transcript: {e}"
-
+    
     return render(request, 'home/video_view.html', {
-        'video_path': os.path.join(settings.MEDIA_URL, 'Video_Learning', video_filename),
+        'video_filename': video_filename,
         'transcript': transcript_content,
         'video_name': video_name
     })
+
+def serve_video(request, video_filename):
+    video_path = os.path.join(VIDEO_LEARNING_DIR, video_filename)
+    
+    try:
+        response = FileResponse(open(video_path, 'rb'), content_type='video/mp4')
+        response['Content-Disposition'] = f'inline; filename={video_filename}'
+        return response
+    except FileNotFoundError:
+        raise Http404("Video not found")
 
 
 # Notes Module

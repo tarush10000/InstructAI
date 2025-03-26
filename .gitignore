@@ -26,3 +26,4 @@ InstructAI\.env
 InstructAI/.env
 *.env
 notes_folder/
+static_root/

@@ -25,7 +25,7 @@
                             <div class="text">Pricing</div>
                         </div>
                         <div class="navbar">
-                            <a href="{% url 'home' %}"><div class="text-wrapper-7">Dashboard</div></a>
+                            <a href="{% url 'dashboard' %}"><div class="text-wrapper-7">Dashboard</div></a>
                             <a href="{% url 'quiz' %}"><div class="text-wrapper-8">Quizzes</div></a>
                             <a href="{% url 'interview' %}"><div class="text-wrapper-9">Interview</div></a>
                             <a href="{% url 'setting' %}"><div class="text-wrapper-10">Settings</div></a>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="logout-button">
                         <div class="state-layer-wrapper">
-                            <div class="state-layer"><div class="label-text">LOG OUT</div></div>
+                            <a  href = "{% url 'login' %}" style = "margin-right: 0px"><button class="logout-btn">LOG OUT</button></a>
                         </div>
                     </div>
                     <div class="text-wrapper-13">InstructAI</div>

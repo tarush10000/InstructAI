@@ -96,7 +96,7 @@
         <div class="header-content">
             <h1 class="logo">InstructAI</h1>
             <nav class="main-nav">
-                <a href="{% url 'home' %}"><div class="nav-link">Dashboard</div></a>
+                <a href="{% url 'dashboard' %}"><div class="nav-link">Dashboard</div></a>
                 <a href="{% url 'quiz' %}"><div class="nav-link">Quizzes</div></a>
                 <a href="{% url 'interview' %}"><div class="nav-link">Interview</div></a>
                 <a href="{% url 'setting' %}"><div class="nav-link">Settings</div></a>
@@ -104,7 +104,7 @@
                 <a href="{% url 'notes' %}"><div class="nav-link">Notes</div></a>
             </nav>
             <div class="header-right">
-                <button class="logout-btn">LOG OUT</button>
+                <a  href = "{% url 'login' %}" style = "margin-right: 0px"><button class="logout-btn">LOG OUT</button></a>
             </div>
         </div>
     </header>

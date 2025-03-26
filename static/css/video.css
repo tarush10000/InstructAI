@@ -484,3 +484,116 @@ a {
         font-size: 20px;
     }
 }
+
+.video-player-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.video-container {
+  background-color: #000;
+  padding: 20px;
+}
+
+.video-title {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.video-player-view {
+  width: 100%;
+  max-height: 600px;
+  border-radius: 8px;
+  background-color: #000;
+}
+
+.transcript-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.transcript-title {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.transcript-content {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.7;
+}
+
+.back-button-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: background-color 0.3s ease, transform 0.2s;
+  font-weight: 500;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .video-player-page {
+      padding: 10px;
+  }
+
+  .video-title {
+      font-size: 1.5rem;
+  }
+
+  .transcript-title {
+      font-size: 1.3rem;
+  }
+}
+
+/* Scrollbar Styling for Transcript */
+.transcript-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transcript-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.transcript-content::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 10px;
+}
+
+.transcript-content::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}

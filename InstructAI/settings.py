@@ -136,10 +136,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root') # Add this line
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Create a 'static' folder in your project root
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'Video_Learning'),
 ]
+
+VIDEO_LEARNING_DIR = os.path.join(BASE_DIR, 'Video_Learning')
 
 TEMPLATES = [
     {

@@ -14,7 +14,7 @@
             <div class="video-container">
                 <h1 class="video-title">{{ video_name }}</h1>
                 <video controls class="video-player-view">
-                    <source src="{{ video_path }}" type="video/mp4">
+                    <source src="{% url 'serve_video' video_filename=video_filename %}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>

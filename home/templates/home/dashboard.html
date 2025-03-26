@@ -27,15 +27,14 @@
             <li><a href="{% url 'setting' %}"><div class="text-wrapper-9">Settings</div></a></li>
             <li><a href="{% url 'video' %}"><div class="text-wrapper-10">Videos</div></a></li>
             <li><a href="{% url 'notes' %}"><div class="text-wrapper-11">Notes</div></a></li>
-            <li><a href="{% url 'home' %}"><div class="text-wrapper-12">Dashboard</div></a></li>
           </ul>
         </nav>
-        <button class="logout-btn">LOG OUT</button>
+        <a  href = "{% url 'login' %}" style = "margin-right: 0px"><button class="logout-btn">LOG OUT</button></a>
       </header>
 
       <main class="dashboard-content">
         <section class="welcome-section">
-          <h1>Welcome Back, <span class="team-name">Darth</span></h1>
+          <h1>Welcome Back, <span class="team-name">Tarush</span></h1>
           <p class="subtitle">
             Ready to learn? Your AI-generated study plan is here!
           </p>
